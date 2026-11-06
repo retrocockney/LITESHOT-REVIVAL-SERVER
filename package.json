@@ -1,0 +1,8 @@
+{
+  "name": "liteshot-server",
+  "version": "1.0.0",
+  "description": "Online free-for-all server for LITESHOT REVIVED",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": { "socket.io": "^4.7.2" }
+}
