@@ -2463,6 +2463,7 @@
                 bot.mesh.rotation.y = s.yaw;
                 bot.mesh.visible = !s.dead;
                 bot.health = s.dead ? 0 : 100;   // the server decides who is dead; hits are always sent on
+                bot.kills = s.kills; bot.deaths = s.deaths;
             }));
             netSocket.on('hurt', (d) => {
                 if (isDead) return;
@@ -2694,6 +2695,7 @@
             const list = document.getElementById('lb-list');
             list.innerHTML = '';
             const rows = [{ name: localPlayerName + ' (YOU)', color: appearance.color, kills: kills, deaths: deaths, you: true }];
+            netPlayers.forEach(b => rows.push({ name: b.name, color: 0xffaa33, kills: b.kills || 0, deaths: b.deaths || 0 }));
             rows.sort((a, b) => (b.kills - a.kills) || (a.deaths - b.deaths));
             const head = document.createElement('div');
             head.className = 'lb-row';
