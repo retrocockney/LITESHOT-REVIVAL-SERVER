@@ -2408,7 +2408,7 @@
 
         // ---- ONLINE PVP: free-for-all through the LITESHOT server (see liteshot-server/) ----
         // Change this to your hosted server's address once it is running online.
-        const ONLINE_SERVER_URL = 'http://localhost:3000';
+        const ONLINE_SERVER_URL = 'https://liteshot-revival-server.onrender.com';
         const netPlayers = new Map();   // server id -> bots entry for that remote player
         let netSocket = null, netId = null, netSendTimer = null;
         let lastHurt = { id: null, weapon: 'Unknown' };
@@ -2445,13 +2445,13 @@
             if (typeof io === 'undefined') { showAnnouncement('ONLINE NEEDS THE SOCKET.IO SCRIPT'); return; }
             const sp = getRandomSpawnPoint();
             camera.position.set(sp.x, eyeHeight, sp.z);
-            netSocket = io(ONLINE_SERVER_URL, { transports: ['websocket', 'polling'] });
+            netSocket = io(ONLINE_SERVER_URL, { transports: ['websocket', 'polling'], timeout: 60000, reconnectionAttempts: 20 });
             netSocket.on('connect', () => {
                 netId = netSocket.id;
                 netSocket.emit('join', { name: localPlayerName, map: ACTIVE_MAP });
                 sendNetState();
             });
-            netSocket.on('connect_error', () => showAnnouncement('COULD NOT REACH THE ONLINE SERVER'));
+            netSocket.on('connect_error', () => showAnnouncement('CONNECTING TO ONLINE SERVER... (free servers can take up to a minute to wake)'));
             netSocket.on('full', () => showAnnouncement('THIS ONLINE MATCH IS FULL'));
             netSocket.on('roster', (list) => list.forEach(addRemotePlayer));
             netSocket.on('playerJoined', addRemotePlayer);
