@@ -16,7 +16,7 @@ const io = new Server(httpServer, { cors: { origin: '*' } });
 const players = new Map(); // socket id -> player
 
 const num = (v) => (Number.isFinite(Number(v)) ? Number(v) : 0);
-const publicInfo = (p) => ({ id: p.id, name: p.name, x: p.x, y: p.y, z: p.z, yaw: p.yaw, health: p.health, dead: p.dead });
+const publicInfo = (p) => ({ id: p.id, name: p.name, x: p.x, y: p.y, z: p.z, yaw: p.yaw, health: p.health, dead: p.dead, kills: p.kills, deaths: p.deaths });
 
 io.on('connection', (socket) => {
     socket.on('join', (data = {}) => {
