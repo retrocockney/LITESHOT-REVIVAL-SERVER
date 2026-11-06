@@ -559,6 +559,7 @@
         });
 
         function appearanceChanged() {
+            if (onlineMode && netSocket && netSocket.connected) netSocket.emit('appearance', appearance);
             saveAppearance();
             buildCustomOptions();
             refreshPreview();
@@ -2418,7 +2419,26 @@
             spawnBot(false, p.x, p.z, 0);
             const bot = bots[bots.length - 1];
             bot.isRemote = true; bot.id = p.id; bot.name = p.name; bot.health = 100;
+            applyRemoteAppearance(bot, p.appearance);
             netPlayers.set(p.id, bot);
+        }
+        function remoteAppearance(info) {
+            const info2 = info || {};
+            const color = Number.isFinite(info2.color) ? info2.color : 0x00ffcc;
+            return {
+                color: color,
+                visor: Number.isFinite(info2.visor) ? info2.visor : color,
+                helmet: info2.helmet || 'visor',
+                armor: info2.armor || 'heavy',
+                emblem: typeof info2.emblem === 'string' ? info2.emblem : undefined
+            };
+        }
+        function applyRemoteAppearance(bot, info) {
+            const app = remoteAppearance(info);
+            bot.appearance = app;
+            const keep = bot.meshCore;
+            [...bot.mesh.children].forEach(c => { if (c !== keep) bot.mesh.remove(c); });
+            buildCharacterParts(bot.mesh, app);
         }
         function removeRemotePlayer(id) {
             const bot = netPlayers.get(id);
@@ -2448,7 +2468,7 @@
             netSocket = io(ONLINE_SERVER_URL, { transports: ['websocket', 'polling'], timeout: 60000, reconnectionAttempts: 20 });
             netSocket.on('connect', () => {
                 netId = netSocket.id;
-                netSocket.emit('join', { name: localPlayerName, map: ACTIVE_MAP });
+                netSocket.emit('join', { name: localPlayerName, map: ACTIVE_MAP, appearance: appearance });
                 sendNetState();
             });
             netSocket.on('connect_error', () => showAnnouncement('CONNECTING TO ONLINE SERVER... (free servers can take up to a minute to wake)'));
@@ -2469,6 +2489,10 @@
                 if (isDead) return;
                 lastHurt = { id: d.from, weapon: d.weapon };
                 damagePlayer(d.amount, d.from, d.weapon);
+            });
+            netSocket.on('appearance', (d) => {
+                const bot = netPlayers.get(d.id);
+                if (bot) applyRemoteAppearance(bot, d.appearance);
             });
             netSocket.on('kill', (d) => {
                 addKillfeedEntry(d.killer, d.victim, d.weapon);
@@ -2695,7 +2719,7 @@
             const list = document.getElementById('lb-list');
             list.innerHTML = '';
             const rows = [{ name: localPlayerName + ' (YOU)', color: appearance.color, kills: kills, deaths: deaths, you: true }];
-            netPlayers.forEach(b => rows.push({ name: b.name, color: 0xffaa33, kills: b.kills || 0, deaths: b.deaths || 0 }));
+            netPlayers.forEach(b => rows.push({ name: b.name, color: b.appearance ? b.appearance.color : 0xffaa33, kills: b.kills || 0, deaths: b.deaths || 0 }));
             rows.sort((a, b) => (b.kills - a.kills) || (a.deaths - b.deaths));
             const head = document.createElement('div');
             head.className = 'lb-row';
