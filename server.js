@@ -1,11 +1,13 @@
-// LITESHOT online server: free-for-all rooms, one room per map.
+// LITESHOT online server.
+//  - Free-for-all: one room per map (og, mini, house), up to 8 players.
+//  - Figure: one room per map, prefixed "fig-". One player is the Figure, the rest are survivors.
 // Run with:  npm install  then  npm start   (listens on PORT, default 3000)
 const http = require('http');
 const { Server } = require('socket.io');
 
 const PORT = process.env.PORT || 3000;
 const MAPS = ['og', 'mini', 'house'];
-const MAX_PER_MAP = 8;
+const MAX_PER_ROOM = 8;
 
 const httpServer = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -14,9 +16,13 @@ const httpServer = http.createServer((req, res) => {
 const io = new Server(httpServer, { cors: { origin: '*' } });
 
 const players = new Map(); // socket id -> player
+const figureState = new Map(); // figure room -> latest Figure state, for players who join later
 
 const num = (v) => (Number.isFinite(Number(v)) ? Number(v) : 0);
-const publicInfo = (p) => ({ id: p.id, name: p.name, x: p.x, y: p.y, z: p.z, yaw: p.yaw, health: p.health, dead: p.dead, kills: p.kills, deaths: p.deaths, appearance: p.appearance });
+const publicInfo = (p) => ({
+    id: p.id, name: p.name, role: p.role, x: p.x, y: p.y, z: p.z, yaw: p.yaw,
+    health: p.health, dead: p.dead, kills: p.kills, deaths: p.deaths, appearance: p.appearance
+});
 
 // Keep only the look settings we expect, so a bad client can't send junk to everyone else
 const HELMETS = ['visor', 'full', 'scout'];
@@ -34,31 +40,45 @@ function cleanAppearance(a) {
     };
 }
 
+// The Figure's room is only valid if the Figure is still connected in it
+function figureIn(room) {
+    for (const p of players.values()) if (p.room === room && p.role === 'figure') return p;
+    return null;
+}
+
 io.on('connection', (socket) => {
     socket.on('join', (data = {}) => {
         const map = MAPS.includes(data.map) ? data.map : 'og';
-        const inRoom = [...players.values()].filter((p) => p.map === map);
-        if (inRoom.length >= MAX_PER_MAP) {
+        const figureMode = data.figure === true;
+        const room = figureMode ? 'fig-' + map : map;
+        const inRoom = [...players.values()].filter((p) => p.room === room);
+        if (inRoom.length >= MAX_PER_ROOM) {
             socket.emit('full');
             socket.disconnect(true);
             return;
         }
+        // Only one Figure per room. If someone asks for it while it's taken, they join as a survivor.
+        let role = 'player';
+        if (figureMode) role = (data.role === 'figure' && !figureIn(room)) ? 'figure' : 'survivor';
+
         const player = {
-            id: socket.id, name: String(data.name || 'Operative').slice(0, 16), map: map,
+            id: socket.id, name: String(data.name || 'Operative').slice(0, 16), map: map, room: room, role: role,
             x: 0, y: 0, z: 0, yaw: 0, health: 100, dead: false, kills: 0, deaths: 0,
             appearance: cleanAppearance(data.appearance)
         };
         players.set(socket.id, player);
-        socket.join(map);
+        socket.join(room);
+        socket.emit('joined', { role: role, room: room });
         socket.emit('roster', inRoom.map(publicInfo));
-        socket.to(map).emit('playerJoined', publicInfo(player));
+        socket.to(room).emit('playerJoined', publicInfo(player));
+        if (figureMode && role === 'survivor' && figureState.has(room)) socket.emit('figureState', figureState.get(room));
     });
 
     socket.on('appearance', (a = {}) => {
         const p = players.get(socket.id);
         if (!p) return;
         p.appearance = cleanAppearance(a);
-        io.to(p.map).emit('appearance', { id: p.id, appearance: p.appearance });
+        io.to(p.room).emit('appearance', { id: p.id, appearance: p.appearance });
     });
 
     socket.on('state', (s = {}) => {
@@ -67,11 +87,25 @@ io.on('connection', (socket) => {
         p.x = num(s.x); p.y = num(s.y); p.z = num(s.z); p.yaw = num(s.yaw);
     });
 
-    // a shot landed on another player: tell the victim's game to take the damage
+    // The Figure's controller sends its position, facing, legs and body HP ~10 times a second
+    socket.on('figureState', (s = {}) => {
+        const p = players.get(socket.id);
+        if (!p || p.role !== 'figure') return;
+        const state = {
+            id: p.id,
+            x: num(s.x), y: num(s.y), z: num(s.z), yaw: num(s.yaw),
+            limbs: Array.isArray(s.limbs) ? s.limbs.slice(0, 16).map((v) => !!v) : [],
+            bodyHP: num(s.bodyHP), moving: !!s.moving, attackIndex: num(s.attackIndex)
+        };
+        figureState.set(p.room, state);
+        socket.to(p.room).volatile.emit('figureState', state);
+    });
+
+    // A shot landed on another player: tell the victim's game to take the damage
     socket.on('hit', (h = {}) => {
         const me = players.get(socket.id);
         const target = players.get(h.targetId);
-        if (!me || !target || target.map !== me.map || target.dead || target.id === me.id) return;
+        if (!me || !target || target.room !== me.room || target.dead || target.id === me.id) return;
         const amount = Math.max(0, Math.min(200, num(h.amount)));
         target.health = Math.max(0, target.health - amount);
         io.to(target.id).emit('hurt', { amount: amount, from: me.id, weapon: String(h.weapon || 'Unknown').slice(0, 24) });
@@ -84,8 +118,8 @@ io.on('connection', (socket) => {
         victim.dead = true;
         victim.deaths++;
         const killer = players.get(d.killerId);
-        if (killer && killer.map === victim.map && killer.id !== victim.id) killer.kills++;
-        io.to(victim.map).emit('kill', {
+        if (killer && killer.room === victim.room && killer.id !== victim.id) killer.kills++;
+        io.to(victim.room).emit('kill', {
             killerId: killer ? killer.id : null,
             killer: killer ? killer.name : 'Unknown',
             victimId: victim.id,
@@ -106,15 +140,19 @@ io.on('connection', (socket) => {
         const p = players.get(socket.id);
         if (!p) return;
         players.delete(socket.id);
-        io.to(p.map).emit('playerLeft', p.id);
+        io.to(p.room).emit('playerLeft', p.id);
+        if (p.role === 'figure') {
+            figureState.delete(p.room);
+            io.to(p.room).emit('figureLeft');
+        }
     });
 });
 
-// everyone in a room gets the positions of the others about 20 times a second
+// Free-for-all: everyone in a map room gets the positions of the others about 20 times a second
 setInterval(() => {
-    for (const map of MAPS) {
-        const list = [...players.values()].filter((p) => p.map === map).map(publicInfo);
-        if (list.length) io.to(map).volatile.emit('states', list);
+    for (const room of MAPS) {
+        const list = [...players.values()].filter((p) => p.room === room).map(publicInfo);
+        if (list.length) io.to(room).volatile.emit('states', list);
     }
 }, 50);
 
