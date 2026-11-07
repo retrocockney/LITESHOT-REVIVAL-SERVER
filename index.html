@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LITESHOT REVIVED</title>
+    <title>LITESHOT — FIGURE MODE FIX</title>
     
 
     <style>
@@ -109,12 +109,20 @@
 
         #keybind-panel { z-index: 43; }
 
-        #play-menu, #wipeout-menu, #map-panel, #pending-panel {
+        #figure-role-panel, #figure-end-panel {
+            position: fixed; inset: 0; background: rgba(5, 8, 14, 0.93); display: none;
+            flex-direction: column; align-items: center; justify-content: center; z-index: 44; color: #fff;
+        }
+        #figure-role-panel h2, #figure-end-panel h2 { letter-spacing: 4px; color: #a855f7; margin-bottom: 18px; text-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
+        #figure-role-panel .play-btn, #figure-end-panel .play-btn { width: 300px; margin-top: 10px; }
+        #figure-end-panel h2 { font-size: 42px; }
+
+        #play-menu, #map-panel, #pending-panel {
             position: fixed; inset: 0; background: rgba(5, 8, 14, 0.93); display: none;
             flex-direction: column; align-items: center; justify-content: center; z-index: 42; color: #fff;
         }
-        #map-panel h2, #pending-panel h2, #play-menu h2, #wipeout-menu h2 { letter-spacing: 4px; color: #00ffcc; margin-bottom: 18px; }
-        #play-menu .play-btn, #wipeout-menu .play-btn { width: 300px; margin-top: 10px; }
+        #map-panel h2, #pending-panel h2, #play-menu h2 { letter-spacing: 4px; color: #00ffcc; margin-bottom: 18px; }
+        #play-menu .play-btn { width: 300px; margin-top: 10px; }
         #map-panel .play-btn, #pending-panel .play-btn { width: 300px; margin-top: 10px; }
 
         #coords {
@@ -200,6 +208,60 @@
         #scope-overlay .center { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #ff3366; }
         #scope-zoom { position: absolute; left: 50%; bottom: 10%; transform: translateX(-50%); color: #00ffcc; font: bold 20px 'Courier New', monospace; text-shadow: 0 0 8px #000; }
         #hud, #coords, #scoreboard { z-index: 9; }
+    
+        #speed-fx { display: none !important; }
+
+        #campaign-intro-panel, #campaign-complete-panel {
+            position: fixed; inset: 0; display: none; flex-direction: column; align-items: center;
+            justify-content: center; z-index: 60; color: #fff; text-align: center;
+            background: radial-gradient(ellipse at center, rgba(21,30,43,0.97), rgba(3,6,11,0.98));
+            padding: 24px; box-sizing: border-box;
+        }
+        #campaign-intro-panel h2, #campaign-complete-panel h2 {
+            color: #ffb44a; letter-spacing: 5px; font-size: clamp(26px, 5vw, 46px);
+            margin: 0 0 12px; text-shadow: 0 0 22px rgba(255,125,35,0.45);
+        }
+        #campaign-intro-panel .campaign-copy, #campaign-complete-panel .campaign-copy {
+            max-width: 650px; color: #c7d0dc; line-height: 1.7; font-size: 14px; margin: 8px 0 18px;
+        }
+        #campaign-intro-panel .play-btn, #campaign-complete-panel .play-btn { width: min(340px, 88vw); margin-top: 9px; }
+        #campaign-cutscene {
+            position: fixed; inset: 0; z-index: 70; display: none; pointer-events: auto;
+            background: rgba(0,0,0,0.12); color: white; text-align: center;
+        }
+        #campaign-cutscene::before, #campaign-cutscene::after {
+            content: ''; position: absolute; left: 0; right: 0; height: 9vh; background: rgba(0,0,0,0.94);
+        }
+        #campaign-cutscene::before { top: 0; }
+        #campaign-cutscene::after { bottom: 0; }
+        #campaign-cine-heading { position: absolute; top: 11vh; left: 0; right: 0; color: #ffb44a; font-size: 12px; letter-spacing: 4px; font-weight: bold; }
+        #campaign-cine-caption {
+            position: absolute; bottom: 12vh; left: 7vw; right: 7vw; max-width: 900px; margin: auto;
+            padding: 12px 18px; color: #fff; font-size: clamp(14px, 2vw, 19px); line-height: 1.55;
+            text-shadow: 0 2px 8px #000; background: rgba(2,5,10,0.42); border-radius: 5px;
+        }
+        #campaign-cutscene-skip {
+            position: absolute; right: 20px; bottom: 2vh; z-index: 2; background: rgba(20,28,40,0.9);
+            border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 14px; border-radius: 4px;
+            cursor: pointer; font: bold 11px 'Courier New', monospace; letter-spacing: 1px;
+        }
+        #campaign-interact-prompt {
+            position: fixed; left: 50%; bottom: 18%; transform: translateX(-50%); display: none;
+            z-index: 12; pointer-events: none; padding: 9px 15px; border: 1px solid rgba(255,180,74,0.75);
+            border-radius: 5px; color: #fff; background: rgba(4,8,14,0.88); font: bold 13px 'Courier New', monospace;
+            letter-spacing: 1px; text-shadow: 0 0 8px #000; white-space: nowrap;
+        }
+        #campaign-case-label {
+            position: fixed; top: 14px; left: 50%; transform: translateX(-50%); z-index: 8; display: none;
+            color: #ffbd69; font: bold 10px 'Courier New', monospace; letter-spacing: 3px;
+            pointer-events: none; text-shadow: 0 2px 8px #000;
+        }
+        @media (max-width: 640px) {
+            #campaign-intro-panel .campaign-copy { font-size: 12px; }
+            #campaign-cutscene::before, #campaign-cutscene::after { height: 7vh; }
+            #campaign-cine-caption { bottom: 10vh; left: 4vw; right: 4vw; }
+        }
+
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -232,8 +294,8 @@
         <h2>SETTINGS</h2>
         <div class="st-row"><span>Mouse sensitivity</span><span><input type="range" id="st-sens" min="30" max="250" step="5"> <span id="st-sens-v"></span></span></div>
         <div class="st-row"><span>Field of view</span><span><input type="range" id="st-fov" min="60" max="100" step="1"> <span id="st-fov-v"></span></span></div>
-        <div class="st-row"><span>Bot difficulty</span><span><select id="st-bot"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select></span></div>
-        <div class="st-row"><span>Volume</span><span><input type="range" id="st-vol" min="0" max="100" step="5"> <span id="st-vol-v"></span></span></div>
+        <div class="st-row"><span>Sound effects</span><span><input type="range" id="st-vol" min="0" max="100" step="5"> <span id="st-vol-v"></span></span></div>
+        <div class="st-row"><span>Background music</span><span><input type="range" id="st-music" min="0" max="100" step="5"> <span id="st-music-v"></span></span></div>
         <label class="st-row"><span>Invert mouse Y</span><input type="checkbox" id="st-invert"></label>
         <label class="st-row"><span>Toggle sprint (press once)</span><input type="checkbox" id="st-tsprint"></label>
         <label class="st-row"><span>Toggle crouch (press once)</span><input type="checkbox" id="st-tcrouch"></label>
@@ -249,17 +311,13 @@
     <div id="play-menu">
         <h2>PLAY</h2>
         <button class="play-btn" id="play-offline" style="background:#ffcc00; color:#06121a;">BOTS</button>
-        <button class="play-btn" id="play-online-pvp" style="background:#00ffcc; color:#06121a;">ONLINE PVP</button>
         <button class="play-btn" id="play-challenge" style="background:#ff7a1a; color:#06121a;">CHALLENGE</button>
-        <button class="play-btn" id="play-wipeout" style="background:#33ff99; color:#06121a;">WIPEOUT</button>
+        <button class="play-btn" id="play-campaign" style="background:#ffb44a; color:#06121a;">CAMPAIGN — THE FIGURE</button>
+        <button class="play-btn" id="play-figure" style="background:#a855f7; color:#06121a;">FIGURE</button>
+        <button class="play-btn" id="play-online-figure" style="background:#00ffcc; color:#06121a;">ONLINE FIGURE</button>
         <button class="play-btn" id="play-back" style="background:#333; color:#fff;">BACK</button>
     </div>
 
-    <div id="wipeout-menu">
-        <h2>WIPEOUT</h2>
-        <button class="play-btn" id="play-wipeout-solo" style="background:#33ff99; color:#06121a;">SINGLE PLAYER</button>
-        <button class="play-btn" id="wipeout-back" style="background:#333; color:#fff;">BACK</button>
-    </div>
     <div id="map-panel">
         <h2>CHOOSE A MAP</h2>
         <button class="play-btn" id="pick-og" style="background:#ffcc00; color:#06121a;">THE OG</button>
@@ -272,6 +330,46 @@
         <div class="kb-note" id="pending-text"></div>
         <button class="play-btn" id="pending-start" style="background:#00ffcc; color:#06121a;">START</button>
     </div>
+    <div id="figure-role-panel">
+        <h2>FIGURE MODE</h2>
+        <div class="kb-note" style="max-width: 520px; line-height: 1.7;">
+            THE FIGURE: no weapons, no jumping, no rides. 16 limbs, three stacked attacks (PUNCH / CHOKE / THROW), and a grapple that takes 90 seconds to recharge.<br><br>
+            SURVIVORS: destroy the Figure's body - or blow off all 16 limbs first to expose it. Dead survivors spectate the rest of the round.
+        </div>
+        <button class="play-btn" id="role-figure" style="background:#a855f7; color:#06121a;">PLAY AS FIGURE</button>
+        <button class="play-btn" id="role-survivor" style="background:#00ffcc; color:#06121a;">PLAY AS SURVIVOR</button>
+        <button class="play-btn" id="role-back" style="background:#333; color:#fff;">BACK</button>
+    </div>
+    <div id="figure-end-panel">
+        <h2 id="figure-end-title">ROUND OVER</h2>
+        <div class="kb-note" id="figure-end-sub"></div>
+        <button class="play-btn" id="figure-again" style="background:#a855f7; color:#06121a;">PLAY AGAIN</button>
+    </div>
+    <div id="campaign-intro-panel">
+        <h2>GREYBRIDGE</h2>
+        <div style="color:#ffb44a; font-size:11px; letter-spacing:4px; font-weight:bold;">CASE FILE F-01 · THE FIGURE</div>
+        <div class="campaign-copy">
+            A containment breach at a secret city laboratory has left scientists missing and an experimental organism loose in Greybridge. Detective Tony Yorkshire Pudding is sent to investigate. The evidence points to something that is already watching him.
+            <br><br><strong>Explore six city districts, investigate the breach, collect permanent upgrades and survive the Figure's hunt.</strong>
+        </div>
+        <button class="play-btn" id="campaign-continue" style="background:#ffb44a; color:#06121a;">BEGIN INVESTIGATION</button>
+        <button class="play-btn" id="campaign-new" style="background:#303a4b; color:#fff;">NEW CASE</button>
+        <button class="play-btn" id="campaign-back" style="background:#171e2a; color:#fff;">BACK</button>
+    </div>
+    <div id="campaign-cutscene">
+        <div id="campaign-cine-heading">GREYBRIDGE POLICE · CASE F-01</div>
+        <div id="campaign-cine-caption"></div>
+        <button id="campaign-cutscene-skip">SKIP CINEMATIC · SPACE / ENTER »</button>
+    </div>
+    <div id="campaign-complete-panel">
+        <h2>CASE CLOSED</h2>
+        <div style="color:#ffb44a; letter-spacing:3px; font-size:11px;">THE FIGURE · GREYBRIDGE</div>
+        <div class="campaign-copy">The F-01 experiment is over. The city is quiet again — but the laboratory's records suggest the Figure was not the only project.</div>
+        <button class="play-btn" id="campaign-replay" style="background:#ffb44a; color:#06121a;">PLAY CAMPAIGN AGAIN</button>
+        <button class="play-btn" id="campaign-home" style="background:#303a4b; color:#fff;">RETURN TO TITLE</button>
+    </div>
+    <div id="campaign-interact-prompt"></div>
+    <div id="campaign-case-label">GREYBRIDGE · CASE F-01</div>
     <div id="pause-menu">
         <h1>PAUSED</h1>
         <button class="play-btn" id="resume-btn">RESUME</button>
@@ -295,7 +393,7 @@
     <div id="blocker">
         <div id="instructions">
             <h1>LITESHOT</h1>
-            <p style="color: #888; margin-bottom: 15px; font-size: 12px;">SINGLE PLAYER ARENA</p>
+            <p style="color: #888; margin-bottom: 15px; font-size: 12px;">SINGLE PLAYER FPS · GREYBRIDGE CAMPAIGN</p>
             
             <div class="input-group">
                 <label>OPERATOR CALLSIGN</label>
@@ -306,6 +404,7 @@
 
             <p id="controls-text" style="font-size: 11px; color: #ccc; line-height: 1.6; text-align: left; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); margin-top: 15px;"></p>
             <button class="play-btn" id="play-btn" style="background:#00ffcc; color:#06121a; margin-top:8px;">PLAY</button>
+            <p id="start-error" role="status" aria-live="polite" style="display:none; color:#ff9aa9; font-size:11px; line-height:1.5; margin:8px 0 0;"></p>
             
             <button class="play-btn" id="open-controls" style="background:#333; color:#fff; margin-top:8px;">CONTROLS</button>
             <button class="play-btn" id="open-settings" style="background:#333; color:#fff; margin-top:8px;">SETTINGS</button>
@@ -316,6 +415,7 @@
         <div id="scope-zoom"></div>
     </div>
     <div id="crosshair"></div>
+    <div id="speed-fx" aria-hidden="true"></div>
     <div id="canvas-container"></div>
     <div id="scoreboard">KILLS: <span id="kill-count">0</span> | DEATHS: <span id="death-count">0</span></div>
     <div id="hitmarker"></div>
@@ -324,6 +424,7 @@
     <div id="hud">
         <div id="health-bar">HP: 100</div>
         <div id="ammo-display">AMMO: -- / --</div>
+        <div id="melee-display" style="color:#b7a0ff; margin:3px 0 7px; font-size:12px;">MELEE: KNIFE [F] · SWITCH [V]</div>
         <div id="grenade-display">GRENADES [G]: 3</div>
         <div style="font-size: 11px; color: #555; margin-bottom: 4px; border-top: 1px solid #222; padding-top: 4px; letter-spacing: 1px;">LOADOUT</div>
         <div id="slot-0" class="slot">[1] RIFLE</div>
@@ -335,9 +436,17 @@
     </div>
 
     <script>
-        // Which map to build: 'og' or 'mini'
-        let onlineMode = false;
-        const ACTIVE_MAP = ['mini', 'house'].includes(localStorage.getItem('liteshotMap')) ? localStorage.getItem('liteshotMap') : 'og';
+        // Map for this page load. Always start a fresh visit on THE OG.
+        // A map picker choice is passed through one reload with sessionStorage,
+        // then consumed so MINI MADNESS cannot become the automatic default.
+        const ACTIVE_MAP = (() => {
+            let chosen = 'og';
+            try {
+                chosen = sessionStorage.getItem('liteshotNextMap') || 'og';
+                sessionStorage.removeItem('liteshotNextMap');
+            } catch (err) {}
+            return ['mini', 'house', 'city'].includes(chosen) ? chosen : 'og';
+        })();
         // ---- MEMORY: your callsign is remembered in this browser (binds, settings and looks are too) ----
         const nameInput = document.getElementById('player-name');
         try {
@@ -348,30 +457,46 @@
             try { localStorage.setItem('liteshotName', nameInput.value); } catch (err) { /* ignore */ }
         });
 
-        const MAP_NAMES = { og: 'THE OG', mini: 'MINI MADNESS', house: 'THE HOUSE' };
+        const MAP_NAMES = { og: 'THE OG', mini: 'MINI MADNESS', house: 'THE HOUSE', city: 'GREYBRIDGE' };
 
-        // ---- PLAY MENU: Bots, Challenge, or Wipeout ----
+        // ---- PLAY MENU: Bots or Challenge ----
         const playMenu = document.getElementById('play-menu');
-        const wipeoutMenu = document.getElementById('wipeout-menu');
         document.getElementById('play-btn').addEventListener('click', () => { playMenu.style.display = 'flex'; });
         document.getElementById('play-back').addEventListener('click', () => { playMenu.style.display = 'none'; });
-        document.getElementById('play-wipeout').addEventListener('click', () => { playMenu.style.display = 'none'; wipeoutMenu.style.display = 'flex'; });
-        document.getElementById('wipeout-back').addEventListener('click', () => { wipeoutMenu.style.display = 'none'; playMenu.style.display = 'flex'; });
 
         // ---- MAP PICKER: choose the map after the mode ----
         const mapPanel = document.getElementById('map-panel');
         const pendingPanel = document.getElementById('pending-panel');
         function openMapPicker(mode) {
             playMenu.style.display = 'none';
-            wipeoutMenu.style.display = 'none';
             mapPanel.style.display = 'flex';
             const pick = (map) => {
                 mapPanel.style.display = 'none';
+                if (mode === 'figure') {
+                    pendingFigureMap = map;
+                    if (map !== ACTIVE_MAP) {
+                        let savedTransition = false;
+                        try {
+                            sessionStorage.setItem('liteshotNextMap', map);
+                            sessionStorage.setItem('liteshotFigureRolePending', '1');
+                            savedTransition = true;
+                        } catch (err) { /* storage can be disabled in private or restricted contexts */ }
+                        if (savedTransition) {
+                            location.reload();
+                            return;
+                        }
+                        // If session storage is unavailable, keep the current map and still allow Figure Mode.
+                        pendingFigureMap = ACTIVE_MAP;
+                    }
+                    openFigureRole();
+                    return;
+                }
                 if (map === ACTIVE_MAP) { startGame(mode); return; }
                 // The map is built when the page loads, so switch maps by reloading, then press START
                 try {
-                    localStorage.setItem('liteshotMap', map);
-                    sessionStorage.setItem('liteshotPendingMode', mode);
+                    sessionStorage.setItem('liteshotNextMap', map);
+                    sessionStorage.removeItem('liteshotPendingMode');
+                    sessionStorage.removeItem('liteshotFigureRolePending');
                 } catch (err) { /* ignore */ }
                 location.reload();
             };
@@ -380,25 +505,13 @@
             document.getElementById('pick-house').onclick = () => pick('house');
             document.getElementById('map-back').onclick = () => {
                 mapPanel.style.display = 'none';
-                if (mode === 'wipeout') wipeoutMenu.style.display = 'flex';
-                else playMenu.style.display = 'flex';
+                playMenu.style.display = 'flex';
             };
         }
-        // After a map switch: show the START button for the mode that was picked
-        let pendingMode = null;
-        try {
-            pendingMode = sessionStorage.getItem('liteshotPendingMode');
-            sessionStorage.removeItem('liteshotPendingMode');
-        } catch (err) { /* ignore */ }
-        if (pendingMode) {
-            document.getElementById('pending-text').textContent =
-                'Loaded ' + MAP_NAMES[ACTIVE_MAP] + '. Press START to play ' + (pendingMode === 'challenge' ? 'challenge' : pendingMode === 'wipeout' ? 'wipeout' : pendingMode === 'online' ? 'online PVP' : 'bots') + '.';
-            pendingPanel.style.display = 'flex';
-        }
-        document.getElementById('pending-start').addEventListener('click', () => {
-            pendingPanel.style.display = 'none';
-            startGame(pendingMode);
-        });
+        // A map change reloads the map, but never starts a match automatically.
+        // Every page load returns to the title screen first.
+        try { sessionStorage.removeItem('liteshotPendingMode'); } catch (err) { /* ignore */ }
+        pendingPanel.style.display = 'none';
 
         // ---- CHARACTER APPEARANCE ----
         const SUIT_COLORS = [0x00ffcc, 0xff3366, 0xffcc00, 0x33ff33, 0x3399ff, 0xff7a1a, 0xb266ff, 0xeeeeee];
@@ -559,7 +672,6 @@
         });
 
         function appearanceChanged() {
-            if (onlineMode && netSocket && netSocket.connected) netSocket.emit('appearance', appearance);
             saveAppearance();
             buildCustomOptions();
             refreshPreview();
@@ -629,6 +741,80 @@
             masterGain.gain.value = SETTINGS.volume;
             masterGain.connect(audioCtx.destination);
         }
+        let musicGain = null;
+        let musicTimer = null;
+        let musicStep = 0;
+        let musicStyle = 'combat';
+        function stopBackgroundMusic() {
+            if (musicTimer) clearTimeout(musicTimer);
+            musicTimer = null;
+            if (musicGain && audioCtx) {
+                const now = audioCtx.currentTime;
+                musicGain.gain.cancelScheduledValues(now);
+                musicGain.gain.setTargetAtTime(0, now, 0.18);
+            }
+        }
+        function startBackgroundMusic(style = 'combat') {
+            if (!audioCtx || !masterGain) return;
+            musicStyle = style;
+            if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+            if (!musicGain) {
+                musicGain = audioCtx.createGain();
+                musicGain.gain.value = 0;
+                musicGain.connect(masterGain);
+            }
+            if (musicTimer) clearTimeout(musicTimer);
+            musicGain.gain.cancelScheduledValues(audioCtx.currentTime);
+            musicGain.gain.setTargetAtTime(SETTINGS.music, audioCtx.currentTime, 0.7);
+            musicStep = 0;
+            const dark = musicStyle === 'campaign' || musicStyle === 'figure';
+            const progressions = dark
+                ? [[110,164.81,220],[98,146.83,196],[82.41,123.47,164.81],[92.5,138.59,185]]
+                : [[130.81,196,261.63],[110,164.81,220],[146.83,220,293.66],[123.47,185,246.94]];
+            const playBar = () => {
+                if (!gameStarted || paused || !musicGain || SETTINGS.music <= 0) {
+                    musicTimer = setTimeout(playBar, 700);
+                    return;
+                }
+                const now = audioCtx.currentTime;
+                const chord = progressions[musicStep % progressions.length];
+                const padLevel = dark ? 0.035 : 0.028;
+                chord.forEach((freq, i) => {
+                    const osc = audioCtx.createOscillator();
+                    const voice = audioCtx.createGain();
+                    osc.type = i === 0 ? 'triangle' : 'sine';
+                    osc.frequency.value = freq;
+                    voice.gain.setValueAtTime(0.0001, now);
+                    voice.gain.linearRampToValueAtTime(padLevel / (i === 0 ? 1 : 1.35), now + 0.7);
+                    voice.gain.setTargetAtTime(0.0001, now + 2.05, 0.55);
+                    osc.connect(voice); voice.connect(musicGain);
+                    osc.start(now); osc.stop(now + 4.2);
+                });
+                const bass = audioCtx.createOscillator();
+                const bassGain = audioCtx.createGain();
+                bass.type = 'sine';
+                bass.frequency.value = chord[0] / 2;
+                bassGain.gain.setValueAtTime(0.0001, now);
+                bassGain.gain.linearRampToValueAtTime(dark ? 0.055 : 0.04, now + 0.12);
+                bassGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.25);
+                bass.connect(bassGain); bassGain.connect(musicGain);
+                bass.start(now); bass.stop(now + 1.3);
+                if (!dark) {
+                    const pluck = audioCtx.createOscillator();
+                    const pluckGain = audioCtx.createGain();
+                    pluck.type = 'sine';
+                    pluck.frequency.value = chord[(musicStep % 2) + 1] * 2;
+                    pluckGain.gain.setValueAtTime(0.0001, now + 0.95);
+                    pluckGain.gain.linearRampToValueAtTime(0.018, now + 1.02);
+                    pluckGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.65);
+                    pluck.connect(pluckGain); pluckGain.connect(musicGain);
+                    pluck.start(now + 0.95); pluck.stop(now + 1.7);
+                }
+                musicStep++;
+                musicTimer = setTimeout(playBar, 2800);
+            };
+            playBar();
+        }
         function playSound(type) {
             if (!audioCtx) return;
             const osc = audioCtx.createOscillator();
@@ -667,23 +853,6 @@
                 osc.frequency.exponentialRampToValueAtTime(40, now + 0.3);
                 gainNode.gain.setValueAtTime(0.4, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
                 osc.start(now); osc.stop(now + 0.3);
-            } else if (type === 'revolver') {
-                // heavy hammer crack with a sharp top click
-                osc.type = 'square'; osc.frequency.setValueAtTime(220, now);
-                osc.frequency.exponentialRampToValueAtTime(60, now + 0.18);
-                gainNode.gain.setValueAtTime(0.35, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
-                osc.start(now); osc.stop(now + 0.18);
-                const click = audioCtx.createOscillator(), clickGain = audioCtx.createGain();
-                click.type = 'triangle'; click.frequency.setValueAtTime(900, now); click.frequency.exponentialRampToValueAtTime(200, now + 0.05);
-                click.connect(clickGain); clickGain.connect(masterGain);
-                clickGain.gain.setValueAtTime(0.2, now); clickGain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-                click.start(now); click.stop(now + 0.05);
-            } else if (type === 'chaingun') {
-                // short, light burst so rapid fire doesn't turn into noise
-                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(260, now);
-                osc.frequency.exponentialRampToValueAtTime(90, now + 0.06);
-                gainNode.gain.setValueAtTime(0.16, now); gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
-                osc.start(now); osc.stop(now + 0.06);
             } else if (type === 'reload') {
                 osc.type = 'sine'; osc.frequency.setValueAtTime(400, now);
                 osc.frequency.setValueAtTime(800, now + 0.2);
@@ -706,7 +875,15 @@
         const killCountEl = document.getElementById('kill-count');
         const deathCountEl = document.getElementById('death-count');
         
-        let gameStarted = false, isDead = false, isScoped = false, isReloading = false;
+        let gameStarted = false, startRequested = false, isDead = false, isScoped = false, isReloading = false;
+        let pendingStartMode = null;
+        // Figure state must exist before the initial HUD render later in this script.
+        let figureMode = false;
+        let figureRole = 'figure';
+        let spectator = false;
+        let figureRoundOver = false;
+        let pendingFigureMap = null;
+        let campaignMode = false;
         let kills = 0, deaths = 0;
 
         const scene = new THREE.Scene();
@@ -775,15 +952,15 @@
 
             const tex = new THREE.CanvasTexture(canvas);
             tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping;
-            const mapType = (() => { try { return localStorage.getItem('liteshotMap'); } catch (e) { return 'og'; } })();
-            tex.repeat.set(mapType === 'mini' || mapType === 'house' ? 15 : 60, mapType === 'mini' || mapType === 'house' ? 15 : 60);
+            tex.repeat.set(ACTIVE_MAP === 'mini' || ACTIVE_MAP === 'house' ? 15 : 60, ACTIVE_MAP === 'mini' || ACTIVE_MAP === 'house' ? 15 : 60);
             return tex;
         }
 
-        const savedMapForFloor = (() => { try { return localStorage.getItem('liteshotMap'); } catch (e) { return 'og'; } })();
-        const floorSize = (savedMapForFloor === 'mini' || savedMapForFloor === 'house') ? 300 : 1200;
+        const savedMapForFloor = ACTIVE_MAP;
+        const floorSize = (ACTIVE_MAP === 'mini' || ACTIVE_MAP === 'house') ? 300 : 1200;
         const floorGeo = new THREE.PlaneGeometry(floorSize, floorSize);
-        const floorMat = new THREE.MeshStandardMaterial({ map: createFloorTexture(), roughness: 0.9, metalness: 0.05 });
+        const floorTexture = createFloorTexture();
+        const floorMat = new THREE.MeshStandardMaterial({ map: floorTexture, roughness: 0.9, metalness: 0.05 });
         const floor = new THREE.Mesh(floorGeo, floorMat);
         floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
         if (savedMapForFloor === 'house') floor.visible = false;
@@ -885,7 +1062,7 @@
         }
 
         const STEP_H = 0.7;
-        const ARENA = ACTIVE_MAP === 'mini' ? 145 : ACTIVE_MAP === 'house' ? 50 : 450;
+        const ARENA = ACTIVE_MAP === 'mini' ? 145 : ACTIVE_MAP === 'house' ? 50 : ACTIVE_MAP === 'city' ? 520 : 450;
 
         if (ACTIVE_MAP === 'mini') {
             const wallThickness = 2;
@@ -1012,7 +1189,10 @@
             wood: new THREE.MeshStandardMaterial({ map: makeTex(107, 256, 256, drawWood), roughness: 0.9, metalness: 0 }),
             rust: new THREE.MeshStandardMaterial({ map: makeTex(108, 256, 256, drawRust), roughness: 0.8, metalness: 0.3 }),
             brick: new THREE.MeshStandardMaterial({ map: makeTex(101, 256, 256, drawBrick), roughness: 0.85, metalness: 0.05 }),
-            neon: new THREE.MeshBasicMaterial({ map: makeTex(109, 256, 128, drawNeon) })
+            neon: new THREE.MeshBasicMaterial({ map: makeTex(109, 256, 128, drawNeon) }),
+            cityGlass: new THREE.MeshStandardMaterial({ color: 0x526b83, emissive: 0x172c45, emissiveIntensity: 0.55, roughness: 0.22, metalness: 0.45 }),
+            cityRoad: new THREE.MeshBasicMaterial({ color: 0x20262e }),
+            cityLine: new THREE.MeshBasicMaterial({ color: 0xc7c6b4 })
         };
 
         const batches = {};
@@ -1091,8 +1271,133 @@
             if (matrices.length === 0) return;
             const inst = new THREE.InstancedMesh(geo, mat, matrices.length);
             matrices.forEach((m, i) => inst.setMatrixAt(i, m));
+            inst.instanceMatrix.needsUpdate = true;
             inst.castShadow = true; inst.receiveShadow = true; inst.frustumCulled = false;
             scene.add(inst);
+        }
+
+
+        function addCityRoadLine(x, z, w, d, color = 0xc7c6b4) {
+            const mat = color === 0xc7c6b4 ? MATS.cityLine : new THREE.MeshBasicMaterial({ color });
+            const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, 0.025, d), mat);
+            mesh.position.set(x, 0.035, z);
+            scene.add(mesh);
+            return mesh;
+        }
+        function makeCitySign(label, x, y, z, color = '#ffb44a') {
+            const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'rgba(5,10,17,0.92)'; ctx.fillRect(0,0,512,128);
+            ctx.strokeStyle = color; ctx.lineWidth = 5; ctx.strokeRect(5,5,502,118);
+            ctx.fillStyle = color; ctx.font = 'bold 42px Courier New'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(label.toUpperCase(),256,66);
+            const tex = new THREE.CanvasTexture(canvas);
+            const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide });
+            const sign = new THREE.Mesh(new THREE.PlaneGeometry(22,5.5),mat);
+            sign.position.set(x,y,z); scene.add(sign);
+            return sign;
+        }
+        function buildCampaignLab() {
+            const cx = 260, cz = -260, h = 34, t = 3, half = 43;
+            const labMat = new THREE.MeshStandardMaterial({ color: 0x3c4855, roughness: 0.78, metalness: 0.25 });
+            const trimMat = new THREE.MeshStandardMaterial({ color: 0x182632, roughness: 0.4, metalness: 0.55 });
+            const floorLab = new THREE.Mesh(new THREE.PlaneGeometry(82,82), new THREE.MeshStandardMaterial({ color: 0x252d37, roughness: 0.9 }));
+            floorLab.rotation.x = -Math.PI/2; floorLab.position.set(cx,0.045,cz); scene.add(floorLab);
+            // A real opening on the south side makes the research facility enterable.
+            createObstacle(new THREE.BoxGeometry(t,h,86),labMat,cx-half, h/2,cz);
+            createObstacle(new THREE.BoxGeometry(t,h,86),labMat,cx+half, h/2,cz);
+            createObstacle(new THREE.BoxGeometry(86,h,t),labMat,cx,h/2,cz-half);
+            createObstacle(new THREE.BoxGeometry(32,h,t),labMat,cx-27,h/2,cz+half);
+            createObstacle(new THREE.BoxGeometry(32,h,t),labMat,cx+27,h/2,cz+half);
+            createObstacle(new THREE.BoxGeometry(22,7,t),trimMat,cx,h-3.5,cz+half);
+            // Laboratory consoles and a central containment plinth.
+            for (const side of [-1,1]) {
+                const console = new THREE.Mesh(new THREE.BoxGeometry(10,3,2),trimMat);
+                console.position.set(cx+side*26,1.5,cz+12); scene.add(console);
+                const screen = new THREE.Mesh(new THREE.BoxGeometry(7,1.5,0.18),new THREE.MeshBasicMaterial({color:0x20d9c0,emissive:0x087b70}));
+                screen.position.set(cx+side*26,3.7,cz+10.9); scene.add(screen);
+            }
+            const plinth = new THREE.Mesh(new THREE.CylinderGeometry(7,9,1.2,8),trimMat);
+            plinth.position.set(cx,0.6,cz-8); scene.add(plinth);
+            const core = new THREE.Mesh(new THREE.SphereGeometry(2.2,12,10),new THREE.MeshStandardMaterial({color:0x9a2439,emissive:0x5b0617,emissiveIntensity:1.1}));
+            core.position.set(cx,4,cz-8); scene.add(core);
+            makeCitySign('F-01 RESEARCH',cx,27,cz+47,'#ff536a');
+            const beacon = new THREE.Mesh(new THREE.BoxGeometry(14,0.35,0.4),new THREE.MeshBasicMaterial({color:0xff334e,emissive:0xff334e}));
+            beacon.position.set(cx,29,cz+45); scene.add(beacon);
+        }
+        function buildCampaignCity() {
+            floorMat.color.setHex(0x62676f);
+            scene.background.setHex(0x202a36);
+            scene.fog.color.setHex(0x202a36);
+            scene.fog.density = 0.00115;
+            // Wide asphalt corridors form one connected road grid between six districts.
+            const roadMat = MATS.cityRoad;
+            const roadMarks = [];
+            const roads = [-455,-325,-195,-65,65,195,325,455];
+            roads.forEach(v => {
+                const alongZ = new THREE.Mesh(new THREE.PlaneGeometry(36,1080),roadMat);
+                alongZ.rotation.x=-Math.PI/2; alongZ.position.set(v,0.018,0); scene.add(alongZ);
+                const alongX = new THREE.Mesh(new THREE.PlaneGeometry(1080,36),roadMat);
+                alongX.rotation.x=-Math.PI/2; alongX.position.set(0,0.019,v); scene.add(alongX);
+                for (let k=-480;k<480;k+=30) {
+                    roadMarks.push(new THREE.Matrix4().makeTranslation(v,0.04,k));
+                    roadMarks.push(new THREE.Matrix4().makeRotationY(Math.PI/2).setPosition(k,0.04,v));
+                }
+            });
+            addInstanced(new THREE.BoxGeometry(0.22,0.025,11),MATS.cityLine,roadMarks);
+
+            const centers=[-390,-260,-130,0,130,260,390];
+            const windows=[];
+            const buildingPalette=[MATS.concrete,MATS.brick,MATS.rust,new THREE.MeshStandardMaterial({color:0x424c59,roughness:0.8,metalness:0.18})];
+            for (let zi=0;zi<centers.length;zi++) for (let xi=0;xi<centers.length;xi++) {
+                const x=centers[xi], z=centers[zi];
+                if (x===260 && z===-260) continue; // enterable F-01 laboratory
+                if ((x===-130 && z===0)||(x===130 && z===130)||(x===-390 && z===390)) continue; // public squares / parks
+                const district = (x>120 && z<-120)?'research':(x<-120 && z<-120)?'industrial':(x<-120 && z>120)?'old':(x>120 && z>120)?'residential':'downtown';
+                let h= district==='industrial'?22+((xi*7+zi*11)%3)*5 : district==='old'?18+((xi+zi)%3)*4 : district==='residential'?26+((xi*3+zi)%4)*5 : district==='research'?38+((xi+zi*2)%3)*8 : 42+((xi*5+zi*3)%4)*12;
+                let w=78+(xi%2)*4, d=78+(zi%2)*4;
+                if (x===0 && z===0) { h=112; w=84; d=84; }
+                if (x===260 && z===-390) h=68;
+                const geom=new THREE.BoxGeometry(w,h,d);
+                const mesh=new THREE.Mesh(geom,buildingPalette[(xi+zi*2)%buildingPalette.length]);
+                mesh.position.set(x,h/2,z); mesh.castShadow=true; mesh.receiveShadow=true; scene.add(mesh);
+                const box=new THREE.Box3().setFromObject(mesh); obstacles.push({mesh,box});
+                // Repeating low-cost window panels are batched into instanced meshes.
+                for (let y=5;y<h-3;y+=7) {
+                    for (let wx=-w/2+8;wx<w/2-3;wx+=12) {
+                        windows.push(new THREE.Matrix4().makeTranslation(x+wx,y,z+d/2+0.11));
+                        windows.push(new THREE.Matrix4().makeRotationY(Math.PI).setPosition(x+wx,y,z-d/2-0.11));
+                    }
+                    for (let wz=-d/2+8;wz<d/2-3;wz+=12) {
+                        windows.push(new THREE.Matrix4().makeRotationY(Math.PI/2).setPosition(x+w/2+0.11,y,z+wz));
+                        windows.push(new THREE.Matrix4().makeRotationY(-Math.PI/2).setPosition(x-w/2-0.11,y,z+wz));
+                    }
+                }
+            }
+            addInstanced(new THREE.BoxGeometry(3.8,2.1,0.18),MATS.cityGlass,windows);
+            buildCampaignLab();
+
+            // District markers are deliberately visible from the street.
+            makeCitySign('DOWNTOWN',0,16,-110,'#71d8d0');
+            makeCitySign('OLD TOWN',-260,14,205,'#d5b18b');
+            makeCitySign('INDUSTRIAL YARD',-260,17,-205,'#ffb44a');
+            makeCitySign('RESIDENTIAL',260,15,205,'#8fb5ff');
+            makeCitySign('RESEARCH DISTRICT',455,18,-260,'#ff536a');
+            makeCitySign('GREYBRIDGE',0,23,390,'#ffb44a');
+
+            // Street lights, sparse props and invisible perimeter walls.
+            const poles=[], heads=[];
+            for (const x of roads) for (const z of roads) {
+                poles.push(new THREE.Matrix4().makeTranslation(x+17,3.0,z+17));
+                heads.push(new THREE.Matrix4().makeTranslation(x+17,6.2,z+17));
+            }
+            addInstanced(new THREE.CylinderGeometry(0.12,0.16,6,6),MATS.rust,poles);
+            addInstanced(new THREE.BoxGeometry(1.4,0.24,0.6),MATS.neon,heads);
+            const invisible=new THREE.MeshBasicMaterial({visible:false});
+            createObstacle(new THREE.BoxGeometry(4,70,1080),invisible,-522,35,0);
+            createObstacle(new THREE.BoxGeometry(4,70,1080),invisible,522,35,0);
+            createObstacle(new THREE.BoxGeometry(1044,70,4),invisible,0,35,-522);
+            createObstacle(new THREE.BoxGeometry(1044,70,4),invisible,0,35,522);
         }
 
         const RESERVED = [[-30, -30, 6], [30, -40, 6], [-40, 20, 6], [50, 40, 6],
@@ -1120,13 +1425,13 @@
         const spawnRingMat = new THREE.MeshBasicMaterial({ color: 0x9fb4c8, transparent: true, opacity: 0.35, side: THREE.DoubleSide });
 
         {
-            PAD_SPOTS = ACTIVE_MAP === 'house' ? [] : ACTIVE_MAP === 'mini' ? [[0, -10], [-42, -42], [42, -42], [0, 42]] : [[0, -18], [-100, -118], [100, -118], [0, 50]];
-            SPAWN_POINTS = ACTIVE_MAP === 'house' ? HOUSE_SPAWNS.map(([i, j]) => ({ x: (i - 12) * HOUSE_CS, z: (j - 9) * HOUSE_CS })) : [];
-            for (let k = 0; k < (ACTIVE_MAP === 'house' ? 0 : 5); k++) {
+            PAD_SPOTS = (ACTIVE_MAP === 'house' || ACTIVE_MAP === 'city') ? [] : ACTIVE_MAP === 'mini' ? [[0, -10], [-42, -42], [42, -42], [0, 42]] : [[0, -18], [-100, -118], [100, -118], [0, 50]];
+            SPAWN_POINTS = ACTIVE_MAP === 'house' ? HOUSE_SPAWNS.map(([i, j]) => ({ x: (i - 12) * HOUSE_CS, z: (j - 9) * HOUSE_CS })) : ACTIVE_MAP === 'city' ? [{x:65,z:455}] : [];
+            for (let k = 0; k < (ACTIVE_MAP === 'house' || ACTIVE_MAP === 'city' ? 0 : 5); k++) {
                 const a = (-90 + k * 72) * Math.PI / 180;
                 SPAWN_POINTS.push({ x: Math.cos(a) * (ACTIVE_MAP === 'mini' ? 38 : 120), z: Math.sin(a) * (ACTIVE_MAP === 'mini' ? 38 : 120) });
             }
-            const PORTAL_PAIRS = ACTIVE_MAP === 'house' ? [] : [
+            const PORTAL_PAIRS = (ACTIVE_MAP === 'house' || ACTIVE_MAP === 'city') ? [] : [
                 { color: 0x00ffff, a: ACTIVE_MAP === 'mini' ? [-95, 55] : [-320, 200], b: ACTIVE_MAP === 'mini' ? [95, -55] : [320, -200] },
                 { color: 0xff33cc, a: ACTIVE_MAP === 'mini' ? [95, 55] : [320, 200], b: ACTIVE_MAP === 'mini' ? [-95, -55] : [-320, -200] }
             ];
@@ -1159,10 +1464,12 @@
                 });
             });
 
-            if (ACTIVE_MAP === 'house') buildHouse(); else {
-            createRoom(0, 0, ACTIVE_MAP === 'mini' ? 22 : 30, ACTIVE_MAP === 'mini' ? 22 : 30, 8);
-            createRoom(ACTIVE_MAP === 'mini' ? -62 : -100, ACTIVE_MAP === 'mini' ? -62 : -100, ACTIVE_MAP === 'mini' ? 24 : 35, ACTIVE_MAP === 'mini' ? 24 : 35, 8);
-            createRoom(ACTIVE_MAP === 'mini' ? 62 : 100, ACTIVE_MAP === 'mini' ? -62 : -100, ACTIVE_MAP === 'mini' ? 24 : 35, ACTIVE_MAP === 'mini' ? 24 : 35, 8);
+            if (ACTIVE_MAP === 'house') buildHouse();
+            else if (ACTIVE_MAP === 'city') buildCampaignCity();
+            else {
+                createRoom(0, 0, ACTIVE_MAP === 'mini' ? 22 : 30, ACTIVE_MAP === 'mini' ? 22 : 30, 8);
+                createRoom(ACTIVE_MAP === 'mini' ? -62 : -100, ACTIVE_MAP === 'mini' ? -62 : -100, ACTIVE_MAP === 'mini' ? 24 : 35, ACTIVE_MAP === 'mini' ? 24 : 35, 8);
+                createRoom(ACTIVE_MAP === 'mini' ? 62 : 100, ACTIVE_MAP === 'mini' ? -62 : -100, ACTIVE_MAP === 'mini' ? 24 : 35, ACTIVE_MAP === 'mini' ? 24 : 35, 8);
             }
 
             const barrelSpots = [];
@@ -1172,7 +1479,7 @@
                 obstacles.push({ mesh: null, box: new THREE.Box3(
                     new THREE.Vector3(x - 0.6, 0, z - 0.6), new THREE.Vector3(x + 0.6, 1.2, z + 0.6)) });
             }
-            for (let c = 0; c < (ACTIVE_MAP === 'house' ? 0 : 240); c++) {
+            for (let c = 0; c < (ACTIVE_MAP === 'house' || ACTIVE_MAP === 'city' ? 0 : 240); c++) {
                 const cx = (mapRand() - 0.5) * 2 * (ARENA - 20);
                 const cz = (mapRand() - 0.5) * 2 * (ARENA - 20);
                 const count = 3 + Math.floor(mapRand() * 4);
@@ -1201,8 +1508,8 @@
             }
 
             const lampPoles = [], lampHeads = [];
-            for (let x = -ARENA + 25; x < (ACTIVE_MAP === 'house' ? -ARENA : ARENA - 20); x += 48) {
-                for (let z = -ARENA + 25; z < ARENA - 20; z += 48) {
+            for (let x = -ARENA + 25; x < (ACTIVE_MAP === 'house' ? -ARENA : ARENA - 20); x += (ACTIVE_MAP === 'city' ? 120 : 48)) {
+                for (let z = -ARENA + 25; z < ARENA - 20; z += (ACTIVE_MAP === 'city' ? 120 : 48)) {
                     const px = x + (mapRand() - 0.5) * 8, pz = z + (mapRand() - 0.5) * 8;
                     if (!isFreeSpot(px, pz, 0.5)) continue;
                     lampPoles.push(new THREE.Matrix4().makeTranslation(px, 2.25, pz));
@@ -1263,7 +1570,7 @@
             return g;
         }
         function buildRideables() {
-            if (ACTIVE_MAP === 'house') return;
+            if (ACTIVE_MAP === 'house' || ACTIVE_MAP === 'city') return;
             const rng = mulberry32(4242);
             const span = ARENA - 20;
             [{ type: 'pig' }, { type: 'pig' }, { type: 'miniCrawler' }].forEach(s => {
@@ -1290,6 +1597,7 @@
         }
         function myRiderId() { return 'local'; }
         function toggleRide() {
+            if (figureMode && figureRole === 'figure') return;
             if (ride) { dismountRide(false); return; }
             if (!gameStarted || isDead) return;
             const v = nearestRideable();
@@ -1323,7 +1631,7 @@
                 return;
             }
             boostEl.style.display = 'none';
-            const near = gameStarted && !isDead ? nearestRideable() : null;
+            const near = gameStarted && !isDead && ACTIVE_MAP !== 'city' ? nearestRideable() : null;
             ridePromptEl.style.display = near ? 'block' : 'none';
             if (near) ridePromptEl.innerText = `PRESS ${keyLabel(KEYS.mount)} TO RIDE THE ${near.type === 'miniCrawler' ? 'MINI CRAWLER (STEALTH)' : near.type.toUpperCase()}`;
         }
@@ -1359,7 +1667,7 @@
                 if (bot.health <= 0 || Math.hypot(bot.mesh.position.x - px, bot.mesh.position.z - pz) > 2.2) return;
                 if (bot.rammedAt && now - bot.rammedAt < 1000) return;
                 bot.rammedAt = now;
-                dealDamage(bot, dmg, name);
+                bot.health -= dmg;
                 if (bot.health <= 0) {
                     playSound('kill');
                     addKillfeedEntry(localPlayerName, bot.name, name);
@@ -1367,7 +1675,7 @@
                     onObjectiveEvent('botKill', { weapon: name });
                     despawnCharacter(bot.mesh, bot.meshCore);
                     kills++; updateHUD();
-                    if (!wipeoutMode) setTimeout(() => { const sp = randomOpenSpot(); spawnBot(bot.isShooter, sp.x, sp.z, sp.y); }, 4000);
+                    scheduleBotRespawn(bot);
                 } else {
                     playSound('hit');
                     showHitMarker(false);
@@ -1484,6 +1792,7 @@
         }
         const WEAPON_SLOT = { shotgun: 2, sniper: 3, revolver: 4, chaingun: 5 };
         function updatePickups() {
+            if (figureMode && figureRole === 'figure') return;
             pickupItems.forEach(item => {
                 if (!item.active) return;
                 item.mesh.rotation.y += 0.02;
@@ -1500,8 +1809,9 @@
                     takePickup(item);
                     updateHUD();
                 } else if (item.kind === 'kit') {
-                    if (playerHealth >= 100) return;
-                    playerHealth = Math.min(100, playerHealth + 35);
+                    const healthCap = campaignMode ? campaignMaxHealth() : 100;
+                    if (playerHealth >= healthCap) return;
+                    playerHealth = Math.min(healthCap, playerHealth + 35);
                     playSound('pickup');
                     showAnnouncement('+35 HP');
                     onObjectiveEvent('healthKit', {});
@@ -1551,6 +1861,7 @@
         }
 
         function updateObjectiveHud() {
+            if (campaignMode) { updateCampaignHUD(true); return; }
             if (!challengeMode) { objectiveEl.style.display = 'none'; return; }
             objectiveEl.style.display = 'block';
             const o = challenge.current;
@@ -1601,18 +1912,12 @@
             else updateObjectiveHud();
         }
 
-        const SETTINGS = { sens: 1, fov: 75, volume: 0.8, invertY: false, toggleSprint: false, toggleCrouch: false, showFps: false, botDifficulty: 'normal' };
-        // Bot tuning per difficulty: health, walking speed, frames between shots, damage per shot
-        const BOT_DIFFICULTY = {
-            easy:   { health: 70,  speed: 0.035, fireInterval: 150, damage: 5 },
-            normal: { health: 100, speed: 0.05,  fireInterval: 90,  damage: 10 },
-            hard:   { health: 130, speed: 0.065, fireInterval: 55,  damage: 14 }
-        };
-        function botTuning() { return BOT_DIFFICULTY[SETTINGS.botDifficulty] || BOT_DIFFICULTY.normal; }
+        const SETTINGS = { sens: 1, fov: 75, volume: 0.8, music: 0.38, invertY: false, toggleSprint: false, toggleCrouch: false, showFps: false };
         try { Object.assign(SETTINGS, JSON.parse(localStorage.getItem('liteshotSettings') || '{}')); } catch (err) {}
         SETTINGS.sens = Math.max(0.3, Math.min(2.5, Number(SETTINGS.sens) || 1));
         SETTINGS.fov = Math.max(60, Math.min(100, Number(SETTINGS.fov) || 75));
         SETTINGS.volume = Math.max(0, Math.min(1, Number(SETTINGS.volume) || 0));
+        SETTINGS.music = Math.max(0, Math.min(1, Number(SETTINGS.music ?? 0.38)));
         const settingsPanel = document.getElementById('settings-panel');
         const fpsEl = document.getElementById('fps-counter');
         let fpsFrames = 0, fpsSince = performance.now();
@@ -1622,6 +1927,8 @@
         }
         function applySettings() {
             if (masterGain) masterGain.gain.value = SETTINGS.volume;
+            if (musicGain) musicGain.gain.setTargetAtTime(SETTINGS.music, audioCtx.currentTime, 0.12);
+            if (gameStarted && SETTINGS.music > 0 && !musicTimer) startBackgroundMusic(campaignMode ? 'campaign' : (figureMode ? 'figure' : 'combat'));
             if (!isScoped) {
                 camera.fov = SETTINGS.fov;
                 camera.updateProjectionMatrix();
@@ -1633,9 +1940,10 @@
             document.getElementById('st-sens-v').textContent = Math.round(SETTINGS.sens * 100) + '%';
             document.getElementById('st-fov').value = SETTINGS.fov;
             document.getElementById('st-fov-v').textContent = SETTINGS.fov + '°';
-            document.getElementById('st-bot').value = SETTINGS.botDifficulty;
             document.getElementById('st-vol').value = Math.round(SETTINGS.volume * 100);
             document.getElementById('st-vol-v').textContent = Math.round(SETTINGS.volume * 100) + '%';
+            document.getElementById('st-music').value = Math.round(SETTINGS.music * 100);
+            document.getElementById('st-music-v').textContent = Math.round(SETTINGS.music * 100) + '%';
             document.getElementById('st-invert').checked = SETTINGS.invertY;
             document.getElementById('st-tsprint').checked = SETTINGS.toggleSprint;
             document.getElementById('st-tcrouch').checked = SETTINGS.toggleCrouch;
@@ -1649,14 +1957,14 @@
         }
         document.getElementById('st-sens').addEventListener('input', (e) => changeSetting(() => SETTINGS.sens = e.target.value / 100));
         document.getElementById('st-fov').addEventListener('input', (e) => changeSetting(() => SETTINGS.fov = Number(e.target.value)));
-        document.getElementById('st-bot').addEventListener('change', (e) => changeSetting(() => SETTINGS.botDifficulty = e.target.value));
         document.getElementById('st-vol').addEventListener('input', (e) => changeSetting(() => SETTINGS.volume = e.target.value / 100));
+        document.getElementById('st-music').addEventListener('input', (e) => changeSetting(() => SETTINGS.music = e.target.value / 100));
         document.getElementById('st-invert').addEventListener('change', (e) => changeSetting(() => SETTINGS.invertY = e.target.checked));
         document.getElementById('st-tsprint').addEventListener('change', (e) => changeSetting(() => { SETTINGS.toggleSprint = e.target.checked; isSprinting = false; }));
         document.getElementById('st-tcrouch').addEventListener('change', (e) => changeSetting(() => { SETTINGS.toggleCrouch = e.target.checked; crouching = false; }));
         document.getElementById('st-fps').addEventListener('change', (e) => changeSetting(() => SETTINGS.showFps = e.target.checked));
         document.getElementById('st-reset').addEventListener('click', () => {
-            Object.assign(SETTINGS, { sens: 1, fov: 75, volume: 0.8, invertY: false, toggleSprint: false, toggleCrouch: false, showFps: false, botDifficulty: 'normal' });
+            Object.assign(SETTINGS, { sens: 1, fov: 75, volume: 0.8, music: 0.38, invertY: false, toggleSprint: false, toggleCrouch: false, showFps: false });
             changeSetting(() => {});
         });
         document.getElementById('st-done').addEventListener('click', () => { settingsPanel.style.display = 'none'; });
@@ -1676,10 +1984,25 @@
         let crouching = false;
         function updateCrouch() {
             const feet = camera.position.y - eyeHeight;
-            const target = ride && ride.type === 'miniCrawler' ? 0.55 : (crouching ? CROUCH_EYE : STAND_EYE);
+            const target = ride && ride.type === 'miniCrawler' ? 0.55 : ((crouching || slideFrames > 0) ? CROUCH_EYE : STAND_EYE);
             eyeHeight += (target - eyeHeight) * 0.25;
             if (Math.abs(target - eyeHeight) < 0.01) eyeHeight = target;
             camera.position.y = feet + eyeHeight;
+        }
+
+
+        const speedFxEl = document.getElementById('speed-fx');
+        let lastDynamicFov = SETTINGS.fov;
+        // Keep the original FPS camera behaviour. Do not edit camera.rotation here:
+        // Three.js exposes camera.rotation in a different Euler order from the YXZ
+        // mouse-look quaternion, so forcing rotation.z to zero can twist or flip the view.
+        function updateMovementEffects() {
+            if (speedFxEl) speedFxEl.style.opacity = '0';
+            if (!isScoped && Math.abs(camera.fov - SETTINGS.fov) > 0.01) {
+                camera.fov = SETTINGS.fov;
+                camera.updateProjectionMatrix();
+                lastDynamicFov = SETTINGS.fov;
+            }
         }
 
         const explosions = [];
@@ -1721,7 +2044,7 @@
                 if (bot.health <= 0) return;
                 const d = bot.mesh.position.distanceTo(pos);
                 if (d >= GRENADE_RADIUS) return;
-                dealDamage(bot, Math.round(GRENADE_DAMAGE * (1 - d / GRENADE_RADIUS)), 'Grenade');
+                bot.health -= Math.round(GRENADE_DAMAGE * (1 - d / GRENADE_RADIUS));
                 if (bot.health <= 0) {
                     playSound('kill');
                     addKillfeedEntry(localPlayerName, bot.name, 'Grenade');
@@ -1729,13 +2052,13 @@
                     onObjectiveEvent('botKill', { weapon: 'Grenade' });
                     despawnCharacter(bot.mesh, bot.meshCore);
                     kills++; updateHUD();
-                    if (!wipeoutMode) setTimeout(() => { const sp = randomOpenSpot(); spawnBot(bot.isShooter, sp.x, sp.z, sp.y); }, 4000);
+                    scheduleBotRespawn(bot);
                 }
             });
 
         }
         function throwGrenade() {
-            if ((ride && ride.type === 'miniCrawler') || grenadeCount <= 0) return;
+            if (isDead || (ride && ride.type === 'miniCrawler') || grenadeCount <= 0) return;
             grenadeCount--;
             updateHUD();
 
@@ -1768,6 +2091,7 @@
 
             activeBullets.push({
                 mesh: bMesh,
+                previousPosition: bMesh.position.clone(),
                 direction: direction.clone().multiplyScalar(1.8),
                 damage: weapon.damage,
                 range: weapon.range,
@@ -1797,12 +2121,13 @@
             return true;
         }
         function findCover(bot) {
+            const tgt = getBotTargetPos();
             let best = null, bestScore = -Infinity;
             for (let i = 0; i < 12; i++) {
                 const a = Math.random() * Math.PI * 2, d = 4 + Math.random() * 10;
                 const x = bot.mesh.position.x + Math.cos(a) * d, z = bot.mesh.position.z + Math.sin(a) * d;
                 if (!botCanStand(x, z) || Math.abs(x) > ARENA || Math.abs(z) > ARENA) continue;
-                const hidden = !clearLineOfSight(x, 1.4, z, camera.position.x, camera.position.y - 0.6, camera.position.z);
+                const hidden = !clearLineOfSight(x, 1.4, z, tgt.x, tgt.y - 0.6, tgt.z);
                 const score = (hidden ? 100 : 0) - Math.hypot(x - camera.position.x, z - camera.position.z) * 0.1 - d * 0.5;
                 if (score > bestScore) { bestScore = score; best = { x: x, z: z }; }
             }
@@ -1825,22 +2150,161 @@
             hitMesh.position.y = 1.1; botGroup.add(hitMesh);
             hitMesh.geometry.computeBoundingBox();
             const botBox = new THREE.Box3(); botBox.setFromObject(hitMesh);
-            const bot = { mesh: botGroup, meshCore: hitMesh, parts: [torso, head], isShooter: isShooter, health: botTuning().health, shootCooldown: 0, patrolTimer: Math.random() * 100, name: 'Bot_Alpha', target: null, think: 0 };
+            const bot = {
+                mesh: botGroup, meshCore: hitMesh, parts: [torso, head], isShooter: isShooter,
+                health: 100, shootCooldown: 0, patrolTimer: Math.random() * 100,
+                name: (isShooter ? 'Ranger_' : 'Hunter_') + String(Math.floor(100 + Math.random() * 900)),
+                target: null, think: 0, state: 'patrol', lastKnown: null, lastSeenAt: 0,
+                nextDecisionAt: 0, nextAttackAt: 0, nextShotAt: 0,
+                strafeSign: Math.random() < 0.5 ? -1 : 1, nextStrafeAt: 0,
+                dodgeSign: Math.random() < 0.5 ? -1 : 1, dodgeUntil: 0, nextDodgeAt: 0,
+                knockbackX: 0, knockbackZ: 0
+            };
             bots.push(bot);
             obstacles.push({ mesh: hitMesh, box: botBox, isBot: true, bot: bot });
         }
 
         function startBots() {
+            if (campaignMode) return;
             if (ACTIVE_MAP !== 'house') {
                 spawnBot(false, -30, -30);
                 spawnBot(false, 30, -40);
                 spawnBot(true, -40, 20);
                 spawnBot(true, 50, 40);
             }
-            const count = ACTIVE_MAP === 'house' ? 8 : 4;
+            const count = ACTIVE_MAP === 'house' ? 8 : (figureMode ? 7 : 4);
             for (let i = 0; i < count; i++) {
                 const sp = randomOpenSpot();
                 spawnBot(i % 2 === 0, sp.x, sp.z, sp.y);
+            }
+        }
+
+        function moveBotToward(bot, tx, tz, speed) {
+            const pos = bot.mesh.position;
+            const dx = tx - pos.x, dz = tz - pos.z;
+            const len = Math.hypot(dx, dz);
+            if (len < 0.01) return;
+            const ux = dx / len, uz = dz / len;
+            let nx = pos.x + ux * speed * frameScale;
+            let nz = pos.z + uz * speed * frameScale;
+            if (botCanStand(nx, nz) && Math.abs(nx) < ARENA && Math.abs(nz) < ARENA) {
+                pos.x = nx; pos.z = nz;
+            } else {
+                const sign = bot.strafeSign || 1;
+                const sx = -uz * sign, sz = ux * sign;
+                nx = pos.x + sx * speed * frameScale;
+                nz = pos.z + sz * speed * frameScale;
+                if (!botCanStand(nx, nz) || Math.abs(nx) >= ARENA || Math.abs(nz) >= ARENA) {
+                    nx = pos.x - sx * speed * frameScale;
+                    nz = pos.z - sz * speed * frameScale;
+                }
+                if (botCanStand(nx, nz) && Math.abs(nx) < ARENA && Math.abs(nz) < ARENA) {
+                    pos.x = nx; pos.z = nz;
+                } else bot.strafeSign *= -1;
+            }
+            bot.mesh.rotation.y = Math.atan2(dx, dz);
+        }
+        function updateBotAI(bot, now) {
+            if (bot.health <= 0) return;
+            if (bot.stunUntil && now < bot.stunUntil) return;
+            const pos = bot.mesh.position;
+            const tgt = getBotTargetPos();
+            const px = tgt.x, pz = tgt.z;
+            const dx = px - pos.x, dz = pz - pos.z;
+            const distance = Math.hypot(dx, dz);
+            const seesPlayer = distance < 52 && clearLineOfSight(pos.x, 1.35, pos.z, px, tgt.y - 0.55, pz);
+            if (seesPlayer) {
+                bot.lastKnown = { x: px, z: pz };
+                bot.lastSeenAt = now;
+                bot.state = 'combat';
+            }
+            const memoryActive = bot.lastKnown && now - bot.lastSeenAt < 7000;
+            const alerted = seesPlayer || memoryActive;
+
+            // Aiming directly at a nearby enemy makes it dodge instead of standing still.
+            if (seesPlayer && distance < 25 && now > (bot.nextDodgeAt || 0)) {
+                const aim = new THREE.Vector3(); camera.getWorldDirection(aim);
+                const toBot = new THREE.Vector3(dx, 0, dz).normalize();
+                if (aim.x * toBot.x + aim.z * toBot.z > 0.91 && now - lastPlayerAttackAt < 950) {
+                    bot.dodgeSign *= -1;
+                    bot.dodgeUntil = now + 420;
+                    bot.nextDodgeAt = now + 950 + Math.random() * 900;
+                }
+            }
+
+            // Apply impact knockback without allowing bots to pass through walls.
+            if (Math.abs(bot.knockbackX) + Math.abs(bot.knockbackZ) > 0.005) {
+                const kx = pos.x + bot.knockbackX, kz = pos.z + bot.knockbackZ;
+                if (botCanStand(kx, kz)) { pos.x = kx; pos.z = kz; }
+                bot.knockbackX *= 0.72; bot.knockbackZ *= 0.72;
+            }
+
+            if (!alerted) {
+                bot.state = 'patrol';
+                if (now > bot.nextDecisionAt || !bot.target || Math.hypot(bot.target.x - pos.x, bot.target.z - pos.z) < 1.3) {
+                    bot.target = randomOpenSpot();
+                    bot.nextDecisionAt = now + 1800 + Math.random() * 2200;
+                }
+                moveBotToward(bot, bot.target.x, bot.target.z, bot.isShooter ? 0.026 : 0.034);
+                return;
+            }
+
+            if (!seesPlayer) {
+                bot.state = 'search';
+                moveBotToward(bot, bot.lastKnown.x, bot.lastKnown.z, bot.isShooter ? 0.045 : 0.062);
+                return;
+            }
+
+            if (!bot.isShooter) {
+                // Hunters close distance quickly and attack at point-blank range.
+                bot.state = 'hunt';
+                if (distance > 2.05) {
+                    moveBotToward(bot, px, pz, 0.074);
+                } else {
+                    bot.mesh.rotation.y = Math.atan2(dx, dz);
+                    if (now >= bot.nextAttackAt) {
+                        bot.nextAttackAt = now + 880 + Math.random() * 220;
+                        dealBotDamage(9 + Math.floor(Math.random() * 5), 'Hunter');
+                    }
+                }
+                return;
+            }
+
+            // Rangers keep a useful firing distance, strafe, dodge and fall back for cover.
+            if (bot.health < 42 && now > bot.nextDecisionAt) {
+                bot.state = 'cover';
+                bot.target = findCover(bot);
+                bot.nextDecisionAt = now + 2600;
+            }
+            if (bot.state === 'cover' && bot.target) {
+                const toCover = Math.hypot(bot.target.x - pos.x, bot.target.z - pos.z);
+                if (toCover > 1.2) moveBotToward(bot, bot.target.x, bot.target.z, 0.065);
+                else if (now - bot.lastSeenAt > 1800) bot.state = 'combat';
+            } else {
+                bot.state = 'combat';
+                if (now > bot.nextStrafeAt) {
+                    bot.strafeSign *= -1;
+                    bot.nextStrafeAt = now + 1200 + Math.random() * 1100;
+                }
+                if (now < bot.dodgeUntil) {
+                    const sideX = -dz / Math.max(0.01, distance) * bot.dodgeSign;
+                    const sideZ = dx / Math.max(0.01, distance) * bot.dodgeSign;
+                    moveBotToward(bot, pos.x + sideX * 5, pos.z + sideZ * 5, 0.095);
+                } else if (distance > 18) {
+                    moveBotToward(bot, px, pz, 0.052);
+                } else if (distance < 9) {
+                    moveBotToward(bot, pos.x - dx, pos.z - dz, 0.048);
+                } else {
+                    const sideX = -dz / Math.max(0.01, distance) * bot.strafeSign;
+                    const sideZ = dx / Math.max(0.01, distance) * bot.strafeSign;
+                    moveBotToward(bot, pos.x + sideX * 6, pos.z + sideZ * 6, 0.038);
+                }
+            }
+            bot.mesh.rotation.y = Math.atan2(dx, dz);
+            if (distance < 43 && now >= bot.nextShotAt) {
+                bot.nextShotAt = now + 1050 + Math.random() * 550;
+                const accuracy = Math.max(0.42, 0.84 - distance * 0.009);
+                if (Math.random() < accuracy) dealBotDamage(7 + Math.floor(Math.random() * 4), 'Ranger');
             }
         }
 
@@ -1856,7 +2320,7 @@
             do {
                 p = { x: (Math.random() - 0.5) * 2 * R, z: (Math.random() - 0.5) * 2 * R };
                 tries++;
-            } while (!isFreeSpot(p.x, p.z, 1) && tries < 80);
+            } while (!isFreeSpot(p.x, p.z, 1) && tries < 100);
             return p;
         }
 
@@ -1869,16 +2333,86 @@
         let pvx = 0, pvz = 0;
         let slideFrames = 0;
         let wallJumpCount = 0, lastWallKey = '';
-        let wallRun = { active: false, used: false, start: 0, cooldownUntil: 0 };
-        let meleeReadyAt = 0, meleeSwingStart = -1e9;
+        let wallRun = { active: false, used: false, start: 0, cooldownUntil: 0, speed: 0.3 };
+        const MELEE_WEAPONS = [
+            { type: 'knife', name: 'Combat Knife', damage: 42, range: 2.65, cooldown: 330, duration: 260, knockback: 0.12 },
+            { type: 'chainsaw', name: 'Chainsaw', damage: 22, range: 2.9, cooldown: 155, duration: 180, knockback: 0.24 },
+            { type: 'sledgehammer', name: 'Sledgehammer', damage: 78, range: 2.95, cooldown: 880, duration: 620, knockback: 1.05 }
+        ];
+        let meleeWeaponIndex = 0;
+        let meleeEquipped = false;
+        let meleeReadyAt = 0, meleeSwingStart = -1e9, meleeHeld = false;
+        let lastPlayerAttackAt = 0;
         const meleeMesh = new THREE.Group();
-        const meleeBlade = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.42),
-            new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.6, roughness: 0.3 }));
-        meleeBlade.position.set(0, 0, -0.2);
-        meleeMesh.add(meleeBlade);
-        meleeMesh.position.set(0.3, -0.25, -0.5);
+        meleeMesh.position.set(0.32, -0.25, -0.5);
         meleeMesh.visible = false;
         camera.add(meleeMesh);
+
+        function addMeleePart(group, geometry, material, position, rotation) {
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(position[0], position[1], position[2]);
+            if (rotation) mesh.rotation.set(rotation[0], rotation[1], rotation[2]);
+            group.add(mesh);
+            return mesh;
+        }
+        function buildMeleeModel(type) {
+            const model = new THREE.Group();
+            const dark = new THREE.MeshStandardMaterial({ color: 0x202631, roughness: 0.42, metalness: 0.65 });
+            const steel = new THREE.MeshStandardMaterial({ color: 0xcbd5df, roughness: 0.25, metalness: 0.85 });
+            const grip = new THREE.MeshStandardMaterial({ color: 0x171717, roughness: 0.85 });
+            if (type === 'knife') {
+                addMeleePart(model, new THREE.BoxGeometry(0.07, 0.075, 0.22), grip, [0, -0.02, 0.02]);
+                addMeleePart(model, new THREE.BoxGeometry(0.16, 0.035, 0.055), dark, [0, 0, -0.105]);
+                addMeleePart(model, new THREE.BoxGeometry(0.065, 0.035, 0.34), steel, [0, 0.012, -0.29]);
+                addMeleePart(model, new THREE.ConeGeometry(0.033, 0.12, 4), steel, [0, 0.012, -0.51], [Math.PI / 2, 0, 0]);
+            } else if (type === 'chainsaw') {
+                const orange = new THREE.MeshStandardMaterial({ color: 0xf06a18, roughness: 0.35, metalness: 0.35 });
+                addMeleePart(model, new THREE.BoxGeometry(0.24, 0.22, 0.34), orange, [0, 0, -0.08]);
+                addMeleePart(model, new THREE.BoxGeometry(0.17, 0.08, 0.15), dark, [0, 0.16, -0.05]);
+                addMeleePart(model, new THREE.BoxGeometry(0.095, 0.12, 0.56), dark, [0, -0.015, -0.49]);
+                addMeleePart(model, new THREE.BoxGeometry(0.055, 0.075, 0.51), steel, [0, -0.015, -0.49]);
+                for (let i = 0; i < 8; i++) {
+                    const z = -0.27 - i * 0.063;
+                    addMeleePart(model, new THREE.BoxGeometry(0.035, 0.045, 0.045), steel, [-0.065, 0.005, z], [0, 0, 0.45]);
+                    addMeleePart(model, new THREE.BoxGeometry(0.035, 0.045, 0.045), steel, [0.065, 0.005, z], [0, 0, -0.45]);
+                }
+                addMeleePart(model, new THREE.BoxGeometry(0.28, 0.045, 0.07), grip, [0, 0.19, -0.02]);
+            } else {
+                addMeleePart(model, new THREE.BoxGeometry(0.065, 0.065, 0.74), grip, [0, -0.015, -0.24]);
+                addMeleePart(model, new THREE.BoxGeometry(0.38, 0.22, 0.22), dark, [0, 0.015, -0.62]);
+                addMeleePart(model, new THREE.BoxGeometry(0.34, 0.17, 0.18), steel, [0, 0.015, -0.635]);
+            }
+            return model;
+        }
+        function updateMeleeHUD() {
+            const current = MELEE_WEAPONS[meleeWeaponIndex];
+            const display = document.getElementById('melee-display');
+            if (display) display.innerText = `MELEE: ${current.name.toUpperCase()} [F] · SWITCH [V]`;
+        }
+        function setMeleeWeapon(index) {
+            meleeWeaponIndex = (index + MELEE_WEAPONS.length) % MELEE_WEAPONS.length;
+            while (meleeMesh.children.length) meleeMesh.remove(meleeMesh.children[0]);
+            meleeMesh.add(buildMeleeModel(MELEE_WEAPONS[meleeWeaponIndex].type));
+            meleeMesh.rotation.set(0, 0, 0);
+            meleeMesh.position.set(0.32, -0.25, -0.5);
+            updateMeleeHUD();
+        }
+        function cycleMeleeWeapon() {
+            setMeleeWeapon(meleeWeaponIndex + 1);
+            showAnnouncement('MELEE: ' + MELEE_WEAPONS[meleeWeaponIndex].name.toUpperCase());
+        }
+        function toggleHolster() {
+            if (!gameStarted || isDead || (figureMode && figureRole === 'figure') || (ride && ride.type === 'miniCrawler')) return;
+            meleeEquipped = !meleeEquipped;
+            fireHeld = false;
+            meleeHeld = false;
+            if (currentWeaponMesh) currentWeaponMesh.visible = !meleeEquipped;
+            meleeMesh.visible = meleeEquipped;
+            meleeMesh.rotation.set(0, 0, 0);
+            meleeMesh.position.set(0.32, -0.25, -0.5);
+            showAnnouncement(meleeEquipped ? 'MELEE EQUIPPED · GUN HOLSTERED' : 'FIREARM EQUIPPED');
+        }
+        setMeleeWeapon(0);
 
         function isGrounded() {
             const feet = camera.position.y - eyeHeight;
@@ -1889,12 +2423,13 @@
             const grounded = isGrounded();
             if (slideFrames > 0) {
                 slideFrames -= frameScale;
-                pvx *= Math.pow(0.972, frameScale); pvz *= Math.pow(0.972, frameScale);
+                pvx *= Math.pow(0.987, frameScale); pvz *= Math.pow(0.987, frameScale);
                 if (Math.hypot(pvx, pvz) < 0.05) slideFrames = 0;
                 return;
             }
             if (hasInput) {
-                const maxSp = crouching ? 0.06 : (isSprinting ? 0.30 : 0.12);
+                const campaignBoost = campaignMode ? (1 + CAMPAIGN.speedUpgrades * 0.12) : 1;
+                const maxSp = (crouching ? 0.06 : (isSprinting ? 0.30 : 0.12)) * figureSpeedFactor() * campaignBoost;
                 const accel = grounded ? 0.2 : 0.035;
                 const adjustedAccel = 1 - Math.pow(1 - accel, frameScale);
                 pvx += (inX * maxSp - pvx) * adjustedAccel;
@@ -1908,13 +2443,14 @@
         }
 
         function tryStartSlide() {
-            if (ride || !gameStarted || isDead) return;
+            if (ride || !gameStarted || isDead || (figureMode && figureRole === 'figure')) return;
             const hasInput = moveForward || moveBackward || moveLeft || moveRight;
             const speed = Math.hypot(pvx, pvz);
             if (!hasInput || speed < 0.15 || slideFrames > 0 || !isGrounded()) return;
-            const k = 0.42 / speed;
+            const slideSpeed = Math.min(0.62, Math.max(0.42, speed * 1.38));
+            const k = slideSpeed / speed;
             pvx *= k; pvz *= k;
-            slideFrames = 42;
+            slideFrames = 58;
         }
 
         function getWallNormal() {
@@ -1942,50 +2478,75 @@
             verticalVelocity = 0.317;
         }
 
-        // Sprint into a wall while airborne, moving alongside it, to run along it for up to 1.8s.
-        // Gravity is weakened while running. One run per airtime; a wall jump ends it.
-        const WALL_RUN_MS = 1800;
+        // Sprint alongside a wall while airborne. Each run builds speed, and a short
+        // cooldown lets you jump across to another wall and keep the momentum going.
+        const WALL_RUN_MS = 2200;
+        const WALL_RUN_MAX_SPEED = 0.92;
         function endWallRun(cooldown) {
+            if (wallRun.active) {
+                // Keep a little extra speed when leaving a wall so another run can be chained.
+                const speed = Math.hypot(pvx, pvz);
+                const cap = WALL_RUN_MAX_SPEED * (campaignMode ? (1 + CAMPAIGN.speedUpgrades * 0.10) : 1);
+                const boosted = Math.min(cap, Math.max(speed, wallRun.speed) * 1.12);
+                if (speed > 0.001) { pvx = pvx / speed * boosted; pvz = pvz / speed * boosted; }
+                wallRun.speed = boosted;
+            }
             wallRun.active = false;
-            if (cooldown) wallRun.cooldownUntil = performance.now() + 400;
+            if (cooldown) wallRun.cooldownUntil = performance.now() + 120;
         }
         function updateWallRun() {
             if (ride || !gameStarted || isDead) { endWallRun(false); return; }
-            if (isGrounded()) { wallRun.used = false; endWallRun(false); return; }
+            if (isGrounded()) {
+                wallRun.used = false;
+                wallRun.speed = 0.3;
+                endWallRun(false);
+                return;
+            }
             const now = performance.now();
             if (!wallRun.active) {
-                if (wallRun.used || !isSprinting || now < wallRun.cooldownUntil) return;
+                if (!isSprinting || now < wallRun.cooldownUntil) return;
                 const n = getWallNormal();
                 const speed = Math.hypot(pvx, pvz);
-                if (!n || speed < 0.2) return;
-                // only when moving roughly parallel to the wall, not straight into it
-                if (Math.abs((pvx * n.x + pvz * n.z) / speed) > 0.45) return;
-                wallRun.active = true; wallRun.used = true; wallRun.start = now;
-                showAnnouncement('WALL RUN');
+                if (!n || speed < 0.18) return;
+                // Only start when moving roughly alongside the wall.
+                if (Math.abs((pvx * n.x + pvz * n.z) / speed) > 0.55) return;
+                wallRun.active = true;
+                wallRun.used = true;
+                wallRun.start = now;
+                wallRun.speed = Math.min(WALL_RUN_MAX_SPEED, Math.max(0.3, speed));
+                // Cancel upward jump momentum as soon as the wall-run starts.
+                if (verticalVelocity > 0) verticalVelocity = 0;
                 return;
             }
             const n = getWallNormal();
             if (!n || !isSprinting || now - wallRun.start > WALL_RUN_MS) { endWallRun(true); return; }
-            // keep running in the direction the player is already heading, pressed lightly into the wall
+            // Build speed throughout the run, up to the cap.
+            const cap = WALL_RUN_MAX_SPEED * (campaignMode ? (1 + CAMPAIGN.speedUpgrades * 0.10) : 1);
+            wallRun.speed = Math.min(cap, wallRun.speed + 0.0032 * frameScale);
             let tx = -n.z, tz = n.x;
             if (pvx * tx + pvz * tz < 0) { tx = -tx; tz = -tz; }
-            pvx = tx * 0.3 - n.x * 0.02;
-            pvz = tz * 0.3 - n.z * 0.02;
-            if (verticalVelocity < -0.02) verticalVelocity = -0.02;   // hold height instead of dropping
+            pvx = tx * wallRun.speed - n.x * 0.025;
+            pvz = tz * wallRun.speed - n.z * 0.025;
+            // Wall-running is sideways only: never let jump momentum lift the player.
+            verticalVelocity = Math.max(-0.015, Math.min(0, verticalVelocity));
         }
 
-        function inMeleeArc(eye, dir, target) {
+
+        function inMeleeArc(eye, dir, target, range) {
             const v = target.clone().sub(eye);
-            if (v.length() > 2.6) return false;
-            return v.normalize().dot(dir) > 0.6;
+            if (v.length() > range) return false;
+            return v.normalize().dot(dir) > 0.58;
         }
         function doMelee() {
             if (!gameStarted || isDead || (ride && ride.type === 'miniCrawler')) return;
+            if (figureMode && figureRole === 'figure') return;
             if (document.pointerLockElement !== document.body) return;
             const now = performance.now();
+            const weapon = MELEE_WEAPONS[meleeWeaponIndex];
             if (now < meleeReadyAt) return;
-            meleeReadyAt = now + 450;
+            meleeReadyAt = now + weapon.cooldown;
             meleeSwingStart = now;
+            lastPlayerAttackAt = now;
             meleeMesh.visible = true;
 
             const dir = new THREE.Vector3();
@@ -1995,19 +2556,24 @@
             bots.forEach(bot => {
                 if (hit || bot.health <= 0) return;
                 const p = new THREE.Vector3(bot.mesh.position.x, bot.mesh.position.y + 1.1, bot.mesh.position.z);
-                if (!inMeleeArc(eye, dir, p)) return;
+                if (!inMeleeArc(eye, dir, p, weapon.range)) return;
                 hit = true;
-                dealDamage(bot, 40, 'Melee');
+                bot.health -= weapon.damage;
+                bot.knockbackX = (bot.knockbackX || 0) + dir.x * weapon.knockback;
+                bot.knockbackZ = (bot.knockbackZ || 0) + dir.z * weapon.knockback;
+                bot.lastKnown = { x: camera.position.x, z: camera.position.z };
+                bot.lastSeenAt = now;
+                bot.state = 'combat';
                 playSound('hit');
                 showHitMarker(false);
                 if (bot.health <= 0) {
                     playSound('kill');
-                    addKillfeedEntry(localPlayerName, bot.name, 'Melee');
+                    addKillfeedEntry(localPlayerName, bot.name, weapon.name);
                     showHitMarker(true);
-                    onObjectiveEvent('botKill', { weapon: 'Melee' });
+                    onObjectiveEvent('botKill', { weapon: weapon.name });
                     despawnCharacter(bot.mesh, bot.meshCore);
                     kills++; updateHUD();
-                    if (!wipeoutMode) setTimeout(() => { const sp = randomOpenSpot(); spawnBot(bot.isShooter, sp.x, sp.z, sp.y); }, 4000);
+                    scheduleBotRespawn(bot);
                 }
             });
         }
@@ -2053,7 +2619,7 @@
             cooldown: true, hideWhenScoped: true
         };
         WEAPON_TYPES.chaingun = {
-            name: 'Chaingun', color: 0xff7a1a, fireRate: 70, range: 90, damage: 13, magSize: 150, reserve: 300,
+            name: 'Chaingun', color: 0xa855f7, fireRate: 70, range: 90, damage: 13, magSize: 150, reserve: 300,
             auto: true, spinUp: 1.2, hideWhenScoped: true
         };
 
@@ -2077,7 +2643,7 @@
         function applyScope(weapon) {
             const levels = isScoped && weapon ? weapon.zoomLevels : null;
             const zoom = levels ? levels[scopeLevel] : null;
-            if (!isScoped) camera.fov = SETTINGS.fov;
+            if (!isScoped) { camera.fov = SETTINGS.fov; lastDynamicFov = SETTINGS.fov; }
             else if (zoom) camera.fov = magFov(zoom);
             else camera.fov = 35;
             camera.updateProjectionMatrix();
@@ -2091,7 +2657,7 @@
                 if (!hide) currentWeaponMesh.position.set(isScoped ? -0.3 : 0, isScoped ? 0.05 : 0, isScoped ? 0.1 : 0);
             }
         }
-        const SOUND_FOR = { rifle: 'rifle', pistol: 'pistol', shotgun: 'shotgun', sniper: 'sniper', revolver: 'revolver', chaingun: 'chaingun' };
+        const SOUND_FOR = { rifle: 'rifle', pistol: 'pistol', shotgun: 'shotgun', sniper: 'sniper', revolver: 'pistol', chaingun: 'rifle' };
         // ---- GUN MODELS: cylinders, cones and angled parts instead of plain boxes ----
         // Parts named 'mag' and 'bolt' are the ones the reload animation moves.
         function buildGunModel(type, accentColor, ox = 0, oy = 0) {
@@ -2220,7 +2786,8 @@
 
         const EMPTY_SLOT_NAMES = ['RIFLE', 'PISTOL', 'SHOTGUN', 'SNIPER', 'REVOLVER', 'CHAINGUN'];
         function updateHUD() {
-            healthEl.innerText = `HP: ${playerHealth}`;
+            if (figureMode && figureRole === 'figure') { updateFigureHud(); return; }
+            healthEl.innerText = campaignMode ? `HP: ${playerHealth} / ${campaignMaxHealth()}` : `HP: ${playerHealth}`;
             const w = inventory[activeSlot];
             if (w) ammoEl.innerText = `AMMO: ${w.ammo} / ${w.reserve}`;
             grenadeEl.innerText = `GRENADES [G]: ${grenadeCount}`;
@@ -2322,82 +2889,6 @@
             p.y = ny;
         }
 
-        let wipeoutMode = false;
-        const wipeout = { phase: 'break', wave: 0, queue: 0, nextAt: 0, lastSpawn: 0, failed: false, bossSpawned: false };
-        const wipeoutEl = document.createElement('div');
-        wipeoutEl.style.cssText = 'position:fixed;left:50%;top:70px;transform:translateX(-50%);color:#33ff99;font:bold 16px monospace;letter-spacing:2px;text-shadow:0 0 8px #000;display:none;pointer-events:none;z-index:6;text-align:center;';
-        document.body.appendChild(wipeoutEl);
-        function wipeoutBest() {
-            try { return +(localStorage.getItem('liteshotWipeoutBest') || 0); } catch (e) { return 0; }
-        }
-        function wipeoutStart() {
-            wipeout.phase = 'break'; wipeout.wave = 0; wipeout.queue = 0; wipeout.failed = false; wipeout.bossSpawned = false;
-            wipeout.nextAt = performance.now() + 4000;
-            showAnnouncement('WIPEOUT: HOLD THE LINE');
-        }
-        function wipeoutSpawnSpot() {
-            for (let t = 0; t < 40; t++) {
-                const sp = randomOpenSpot();
-                if (Math.hypot(sp.x - camera.position.x, sp.z - camera.position.z) >= 18) return sp;
-            }
-            return randomOpenSpot();
-        }
-        function wipeoutStartWave() {
-            wipeout.wave++;
-            wipeout.phase = 'fight';
-            wipeout.queue = Math.min(24, 3 + wipeout.wave * 2);
-            wipeout.lastSpawn = 0;
-            wipeout.bossSpawned = false;
-            if (wipeout.wave % 5 === 0) {
-                const sp = wipeoutSpawnSpot();
-                spawnBot(true, sp.x, sp.z, sp.y);
-                const boss = bots[bots.length - 1];
-                boss.isBoss = true; boss.name = 'Wipeout Boss'; boss.health = 900 + wipeout.wave * 80;
-                boss.mesh.scale.setScalar(2.15);
-                boss.parts.forEach(part => { part.material.emissive = new THREE.Color(0x5a1200); part.material.emissiveIntensity = 0.65; });
-                wipeout.bossSpawned = true;
-                showAnnouncement('BOSS WAVE ' + wipeout.wave + ' — TAKE IT DOWN!');
-            } else showAnnouncement('WAVE ' + wipeout.wave);
-            if (wipeout.wave > wipeoutBest()) {
-                try { localStorage.setItem('liteshotWipeoutBest', String(wipeout.wave)); } catch (e) { /* ignore */ }
-            }
-        }
-        function updateWipeout() {
-            if (!wipeoutMode || !gameStarted) { wipeoutEl.style.display = 'none'; return; }
-            wipeoutEl.style.display = 'block';
-            const now = performance.now();
-            if (isDead) { wipeout.failed = true; wipeoutEl.innerText = 'DOWN'; return; }
-            if (wipeout.failed) {
-                bots.forEach(b => { if (b.health > 0) { b.health = 0; despawnCharacter(b.mesh, b.meshCore); } });
-                wipeout.failed = false; wipeout.wave = 0; wipeout.queue = 0; wipeout.phase = 'break'; wipeout.bossSpawned = false;
-                wipeout.nextAt = now + 5000;
-                showAnnouncement('OVERRUN: BACK TO WAVE 1 (BEST ' + wipeoutBest() + ')');
-            }
-            const alive = bots.filter(b => b.health > 0).length;
-            if (wipeout.phase === 'break') {
-                const secs = Math.ceil(Math.max(0, wipeout.nextAt - now) / 1000);
-                wipeoutEl.innerText = wipeout.wave === 0 ? 'WAVE 1 IN ' + secs : 'WAVE ' + wipeout.wave + ' CLEARED · NEXT IN ' + secs;
-                if (now >= wipeout.nextAt) wipeoutStartWave();
-                return;
-            }
-            if (wipeout.queue > 0 && now - wipeout.lastSpawn > 900) {
-                const sp = wipeoutSpawnSpot();
-                const shooterChance = Math.min(0.7, 0.2 + wipeout.wave * 0.08);
-                spawnBot(Math.random() < shooterChance, sp.x, sp.z, sp.y);
-                bots[bots.length - 1].health = 100 + wipeout.wave * 10;
-                wipeout.queue--; wipeout.lastSpawn = now;
-            }
-            const bossAlive = bots.some(b => b.isBoss && b.health > 0);
-            wipeoutEl.innerText = (wipeout.wave % 5 === 0 ? 'BOSS WAVE ' : 'WAVE ') + wipeout.wave + ' · ' + (alive + wipeout.queue) + ' LEFT' + (bossAlive ? ' · BOSS ACTIVE' : '');
-            if (wipeout.queue === 0 && alive === 0) {
-                wipeout.phase = 'break'; wipeout.nextAt = now + 10000;
-                playerHealth = 100; grenadeCount = 3;
-                inventory.forEach(w => { if (w) w.ammo = w.maxAmmo; });
-                updateHUD();
-                showAnnouncement('WAVE ' + wipeout.wave + ' CLEARED');
-            }
-        }
-
         const hitmarkerEl = document.getElementById('hitmarker');
         let hitmarkerTimer = null;
         function showHitMarker(kill) {
@@ -2407,111 +2898,55 @@
             hitmarkerTimer = setTimeout(() => hitmarkerEl.style.display = 'none', 120);
         }
 
-        // ---- ONLINE PVP: free-for-all through the LITESHOT server (see liteshot-server/) ----
-        // Change this to your hosted server's address once it is running online.
-        const ONLINE_SERVER_URL = 'https://liteshot-revival-server.onrender.com';
-        const netPlayers = new Map();   // server id -> bots entry for that remote player
-        let netSocket = null, netId = null, netSendTimer = null;
-        let lastHurt = { id: null, weapon: 'Unknown' };
-
-        function addRemotePlayer(p) {
-            if (p.id === netId || netPlayers.has(p.id)) return;
-            spawnBot(false, p.x, p.z, 0);
-            const bot = bots[bots.length - 1];
-            bot.isRemote = true; bot.id = p.id; bot.name = p.name; bot.health = 100;
-            applyRemoteAppearance(bot, p.appearance);
-            netPlayers.set(p.id, bot);
-        }
-        function remoteAppearance(info) {
-            const info2 = info || {};
-            const color = Number.isFinite(info2.color) ? info2.color : 0x00ffcc;
-            return {
-                color: color,
-                visor: Number.isFinite(info2.visor) ? info2.visor : color,
-                helmet: info2.helmet || 'visor',
-                armor: info2.armor || 'heavy',
-                emblem: typeof info2.emblem === 'string' ? info2.emblem : undefined
-            };
-        }
-        function applyRemoteAppearance(bot, info) {
-            const app = remoteAppearance(info);
-            bot.appearance = app;
-            const keep = bot.meshCore;
-            [...bot.mesh.children].forEach(c => { if (c !== keep) bot.mesh.remove(c); });
-            buildCharacterParts(bot.mesh, app);
-        }
-        function removeRemotePlayer(id) {
-            const bot = netPlayers.get(id);
-            if (!bot) return;
-            netPlayers.delete(id);
-            bot.health = 0;
-            const i = bots.indexOf(bot);
-            if (i > -1) bots.splice(i, 1);
-            despawnCharacter(bot.mesh, bot.meshCore);
-        }
-        // Damage to a remote player goes to the server; the victim's own game takes the damage
-        function dealDamage(bot, amount, weapon) {
-            if (bot.isRemote) {
-                if (netSocket && netSocket.connected && bot.health > 0) netSocket.emit('hit', { targetId: bot.id, amount: amount, weapon: weapon });
-                return;
+        function showStartError(message) {
+            const errorEl = document.getElementById('start-error');
+            if (errorEl) {
+                errorEl.textContent = message;
+                errorEl.style.display = 'block';
             }
-            bot.health -= amount;
-        }
-        function sendNetState() {
-            if (!netSocket || !netSocket.connected || isDead) return;
-            netSocket.volatile.emit('state', { x: camera.position.x, y: camera.position.y - eyeHeight, z: camera.position.z, yaw: yaw });
-        }
-        function connectOnline() {
-            if (typeof io === 'undefined') { showAnnouncement('ONLINE NEEDS THE SOCKET.IO SCRIPT'); return; }
-            const sp = getRandomSpawnPoint();
-            camera.position.set(sp.x, eyeHeight, sp.z);
-            netSocket = io(ONLINE_SERVER_URL, { transports: ['websocket', 'polling'], timeout: 60000, reconnectionAttempts: 20 });
-            netSocket.on('connect', () => {
-                netId = netSocket.id;
-                netSocket.emit('join', { name: localPlayerName, map: ACTIVE_MAP, appearance: appearance });
-                sendNetState();
-            });
-            netSocket.on('connect_error', () => showAnnouncement('CONNECTING TO ONLINE SERVER... (free servers can take up to a minute to wake)'));
-            netSocket.on('full', () => showAnnouncement('THIS ONLINE MATCH IS FULL'));
-            netSocket.on('roster', (list) => list.forEach(addRemotePlayer));
-            netSocket.on('playerJoined', addRemotePlayer);
-            netSocket.on('playerLeft', removeRemotePlayer);
-            netSocket.on('states', (list) => list.forEach(s => {
-                const bot = netPlayers.get(s.id);
-                if (!bot) return;
-                bot.mesh.position.set(s.x, s.y, s.z);
-                bot.mesh.rotation.y = s.yaw;
-                bot.mesh.visible = !s.dead;
-                bot.health = s.dead ? 0 : 100;   // the server decides who is dead; hits are always sent on
-                bot.kills = s.kills; bot.deaths = s.deaths;
-            }));
-            netSocket.on('hurt', (d) => {
-                if (isDead) return;
-                lastHurt = { id: d.from, weapon: d.weapon };
-                damagePlayer(d.amount, d.from, d.weapon);
-            });
-            netSocket.on('appearance', (d) => {
-                const bot = netPlayers.get(d.id);
-                if (bot) applyRemoteAppearance(bot, d.appearance);
-            });
-            netSocket.on('kill', (d) => {
-                addKillfeedEntry(d.killer, d.victim, d.weapon);
-                if (d.killerId === netId) { kills++; killCountEl.textContent = kills; }
-            });
-            netSendTimer = setInterval(sendNetState, 60);
         }
 
-        function startGame(mode) {
+        function failPendingStart(message) {
+            // Only fail a fresh start. Losing pointer lock during a live round is a pause, not a startup error.
+            if (!pendingStartMode || gameStarted) return;
+            pendingStartMode = null;
+            startRequested = false;
+            blocker.style.display = 'flex';
             playMenu.style.display = 'none';
-            const inputName = document.getElementById('player-name').value.trim();
-            if (inputName) localPlayerName = inputName;
+            mapPanel.style.display = 'none';
+            pendingPanel.style.display = 'none';
+            const rolePanel = document.getElementById('figure-role-panel');
+            if (rolePanel) rolePanel.style.display = 'none';
+            showStartError(message || 'Mouse capture was blocked. Click PLAY and try again.');
+        }
 
+        function prepareGame(mode) {
+            if (mode !== 'figure') onlineFigure = false;
+            meleeEquipped = false;
+            meleeMesh.visible = false;
+            campaignMode = mode === 'campaign';
             challengeMode = mode === 'challenge';
-            wipeoutMode = mode === 'wipeout';
-            onlineMode = mode === 'online';
-            initAudio();
-            if (wipeoutMode) wipeoutStart(); else if (!onlineMode) startBots();
-            if (!onlineMode) buildPickups(randomPickupSpots());
+            figureMode = mode === 'figure';
+            spectator = false;
+            isDead = false;
+            figureRoundOver = false;
+
+            if (figureMode) {
+                // Figure players are unarmed; survivors need their standard rifle and pistol.
+                if (figureRole === 'figure') {
+                    for (let s = 0; s < 6; s++) inventory[s] = null;
+                    activeSlot = -1;
+                    spawnViewModelMesh(null);
+                } else {
+                    inventory = [makeWeapon('rifle'), makeWeapon('pistol'), null, null, null, null];
+                    activeSlot = 0;
+                    spawnViewModelMesh(inventory[0]);
+                }
+            }
+
+            if (!onlineFigure) startBots();
+            if (!onlineFigure) buildPickups(randomPickupSpots());
+            if (campaignMode) startCampaignSession();
             if (challengeMode) {
                 challenge.completed = 0;
                 challenge.lastKind = null;
@@ -2519,34 +2954,113 @@
             }
             updateObjectiveHud();
             updateHUD();
-            if (onlineMode) connectOnline();
-            document.body.requestPointerLock();
+            if (figureMode && (!onlineFigure || figureRole === 'figure')) startFigureGame();
+            if (figureMode && onlineFigure) connectOnlineFigure();
+        }
+
+        function startGame(mode) {
+            if (gameStarted || startRequested) return;
+            startRequested = true;
+            pendingStartMode = mode;
+            blocker.style.display = 'flex';
+            playMenu.style.display = 'none';
+            mapPanel.style.display = 'none';
+            pendingPanel.style.display = 'none';
+            const rolePanel = document.getElementById('figure-role-panel');
+            if (rolePanel) rolePanel.style.display = 'none';
+            const errorEl = document.getElementById('start-error');
+            if (errorEl) errorEl.style.display = 'none';
+
+            const inputName = document.getElementById('player-name').value.trim();
+            if (inputName) localPlayerName = inputName;
+            try { initAudio(); } catch (err) { /* gameplay must still start if audio is unavailable */ }
+
+            if (typeof document.body.requestPointerLock !== 'function') {
+                failPendingStart('This browser does not support mouse capture. Open LiteShot in a desktop browser to play.');
+                return;
+            }
+            try {
+                const request = document.body.requestPointerLock();
+                if (request && typeof request.catch === 'function') {
+                    request.catch(() => failPendingStart('Mouse capture was blocked. Click PLAY and try again.'));
+                }
+                // Older browsers do not return a promise or always fire pointerlockerror.
+                setTimeout(() => {
+                    if (pendingStartMode && !gameStarted && document.pointerLockElement !== document.body) {
+                        failPendingStart('Mouse capture was not granted. Click PLAY and try again.');
+                    }
+                }, 2500);
+            } catch (err) {
+                failPendingStart('Mouse capture was blocked. Click PLAY and try again.');
+            }
         }
         playOfflineBtn.addEventListener('click', () => openMapPicker('offline'));
         document.getElementById('play-challenge').addEventListener('click', () => openMapPicker('challenge'));
-        document.getElementById('play-wipeout-solo').addEventListener('click', () => openMapPicker('wipeout'));
-        document.getElementById('play-online-pvp').addEventListener('click', () => openMapPicker('online'));
 
         document.addEventListener('pointerlockchange', () => {
             if (document.pointerLockElement === document.body) {
+                // Never treat an unexpected pointer lock as permission to start a level.
+                if (!startRequested) {
+                    document.exitPointerLock();
+                    return;
+                }
+                if (pendingStartMode) {
+                    const mode = pendingStartMode;
+                    try {
+                        prepareGame(mode);
+                        pendingStartMode = null;
+                    } catch (err) {
+                        console.error('LiteShot could not prepare the selected mode:', err);
+                        failPendingStart('The match could not be prepared. Reload LiteShot and try again.');
+                        try { document.exitPointerLock(); } catch (lockErr) {}
+                        return;
+                    }
+                }
                 if (!isDead) {
                     blocker.style.display = 'none'; pauseMenu.style.display = 'none'; paused = false; crosshair.style.display = 'block';
                     hud.style.display = 'block'; scoreboard.style.display = 'block'; document.getElementById('coords').style.display = 'block';
                     gameStarted = true;
+                    // Start/resume the soundtrack from the player's Play interaction.
+                    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+                    startBackgroundMusic(campaignMode ? 'campaign' : (figureMode ? 'figure' : 'combat'));
+                    if (campaignMode && CAMPAIGN.needsOpening) {
+                        CAMPAIGN.needsOpening = false;
+                        startCampaignCutscene('opening');
+                    }
                 }
             } else {
+                if (figureRoundOver) return;
                 if (gameStarted && !isDead) {
                     pauseMenu.style.display = 'flex'; paused = true; crosshair.style.display = 'none';
                     hud.style.display = 'none'; scoreboard.style.display = 'none'; document.getElementById('coords').style.display = 'none';
                     gameStarted = false;
+                    stopBackgroundMusic();
                 }
             }
         });
+        document.addEventListener('pointerlockerror', () => {
+            failPendingStart('Mouse capture was blocked. Click PLAY and try again.');
+        });
+        // Force a clean title-screen state on every fresh page load.
+        gameStarted = false;
+        startRequested = false;
+        blocker.style.display = 'flex';
+        playMenu.style.display = 'none';
+        mapPanel.style.display = 'none';
+        pendingPanel.style.display = 'none';
+        // pauseMenu is declared further down; query the element here to avoid a const temporal-dead-zone crash.
+        document.getElementById('pause-menu').style.display = 'none';
+        crosshair.style.display = 'none';
+        hud.style.display = 'none';
+        scoreboard.style.display = 'none';
+        document.getElementById('coords').style.display = 'none';
+        if (document.pointerLockElement === document.body) document.exitPointerLock();
 
         document.addEventListener('contextmenu', e => e.preventDefault());
+        window.addEventListener('blur', () => { meleeHeld = false; fireHeld = false; });
 
         document.addEventListener('mousemove', (e) => {
-            if (!gameStarted || isDead || document.pointerLockElement !== document.body) return;
+            if (!gameStarted || (isDead && !spectator) || (campaignMode && CAMPAIGN.cutscene) || document.pointerLockElement !== document.body) return;
             const currentSens = (isScoped ? mouseSensitivity * scopeSens : mouseSensitivity) * SETTINGS.sens;
             yaw -= e.movementX * currentSens;
             pitch -= e.movementY * currentSens * (SETTINGS.invertY ? -1 : 1);
@@ -2557,19 +3071,25 @@
         const DEFAULT_KEYS = {
             forward: 'KeyW', back: 'KeyS', left: 'KeyA', right: 'KeyD',
             jump: 'Space', sprint: 'ShiftLeft', reload: 'KeyR', grenade: 'KeyG',
-            scoreboard: 'Tab', pause: 'KeyP', cycle: 'KeyQ', crouch: 'ControlLeft', mount: 'KeyE',
-            slot1: 'Digit1', slot2: 'Digit2', slot3: 'Digit3', slot4: 'Digit4', slot5: 'Digit5', slot6: 'Digit6', melee: 'KeyF'
+            scoreboard: 'Tab', pause: 'KeyP', cycle: 'KeyQ', crouch: 'ControlLeft', mount: 'KeyE', holster: 'KeyX',
+            slot1: 'Digit1', slot2: 'Digit2', slot3: 'Digit3', slot4: 'Digit4', slot5: 'Digit5', slot6: 'Digit6', melee: 'KeyF', cycleMelee: 'KeyV'
         };
         const KEY_LABELS = {
             forward: 'Move forward', back: 'Move back', left: 'Move left', right: 'Move right',
             jump: 'Jump', sprint: 'Sprint', reload: 'Reload', grenade: 'Grenade',
-            scoreboard: 'Leaderboard', pause: 'Pause', cycle: 'Next weapon', crouch: 'Crouch', mount: 'Ride',
-            slot1: 'Weapon 1', slot2: 'Weapon 2', slot3: 'Weapon 3', slot4: 'Weapon 4', slot5: 'Weapon 5', slot6: 'Weapon 6', melee: 'Melee'
+            scoreboard: 'Leaderboard', pause: 'Pause', cycle: 'Next weapon', crouch: 'Slide / Crouch', mount: 'Ride', holster: 'Holster / melee mode (X)',
+            slot1: 'Weapon 1', slot2: 'Weapon 2', slot3: 'Weapon 3', slot4: 'Weapon 4', slot5: 'Weapon 5', slot6: 'Weapon 6', melee: 'Melee attack', cycleMelee: 'Switch melee weapon'
         };
         const KEYS = Object.assign({}, DEFAULT_KEYS);
         try {
             const saved = JSON.parse(localStorage.getItem('liteshotKeys') || '{}');
             for (const a in DEFAULT_KEYS) if (typeof saved[a] === 'string') KEYS[a] = saved[a];
+            // One-time migration from the old default M ride key to E.
+            if (!localStorage.getItem('liteshotMountEUpdate') && saved.mount === 'KeyM') {
+                KEYS.mount = 'KeyE';
+                localStorage.setItem('liteshotKeys', JSON.stringify(KEYS));
+                localStorage.setItem('liteshotMountEUpdate', '1');
+            }
         } catch (err) {}
         function saveKeys() {
             try { localStorage.setItem('liteshotKeys', JSON.stringify(KEYS)); } catch (err) {}
@@ -2584,10 +3104,10 @@
         function renderControlsText() {
             const k = (a) => `<kbd>${keyLabel(KEYS[a])}</kbd>`;
             document.getElementById('controls-text').innerHTML =
-                `${k('forward')}${k('left')}${k('back')}${k('right')} - Move | ${k('jump')} - Jump | ${k('sprint')} - Sprint | ${k('crouch')} - Crouch | ${k('mount')} - Ride | ${k('melee')} - Melee<br>` +
-                `<kbd>Mouse</kbd> - Look | <kbd>Left Click</kbd> - Fire | <kbd>Right Click</kbd> - Scope<br>` +
+                `${k('forward')}${k('left')}${k('back')}${k('right')} - Move | ${k('jump')} - Jump | ${k('sprint')} - Sprint | ${k('crouch')} - Slide / Crouch | ${k('mount')} - Ride | ${k('melee')} - Melee | ${k('cycleMelee')} - Switch melee<br>` +
+                `<kbd>Mouse</kbd> - Look | <kbd>Left Click</kbd> - Fire | <kbd>Right Click</kbd> - Scope: 3X → 10X → Exit<br>` +
                 `${k('reload')} - Reload | ${k('grenade')} - Grenade | ${k('scoreboard')} - Leaderboard | ${k('pause')} - Pause<br>` +
-                `${k('slot1')}-${k('slot6')} - Weapons | ${k('cycle')} - Next weapon<br>` +
+                `${k('slot1')}-${k('slot6')} - Firearms | ${k('cycle')} - Next firearm<br>` +
                 `Shotgun &amp; Sniper spawn on the floor. Health kits restore HP.`;
         }
 
@@ -2659,13 +3179,26 @@
                 if (!e.repeat) togglePause();
                 return;
             }
-            if (!gameStarted || isDead) return;
+            if (campaignMode && CAMPAIGN.cutscene && (e.code === 'Space' || e.code === 'Enter')) {
+                e.preventDefault();
+                if (!e.repeat) finishCampaignCutscene();
+                return;
+            }
+            if (!gameStarted || (isDead && !spectator)) return;
+            if (campaignMode && e.code === KEYS.mount) { if (!e.repeat) campaignInteract(); return; }
             if (e.code === KEYS.mount) { if (!e.repeat) toggleRide(); return; }
+            if (e.code === KEYS.holster) { if (!e.repeat) toggleHolster(); return; }
+            if (figureMode && figureRole === 'figure') {
+                if (e.code === KEYS.jump || e.code === KEYS.grenade || e.code === KEYS.reload) return;
+                if (e.code === KEYS.melee && !e.repeat) { figureAttack(); return; }
+                if (e.code === KEYS.cycleMelee && !e.repeat) { FIG.attackIndex = (FIG.attackIndex + 1) % FIG.attacks.length; showAnnouncement('ATTACK: ' + FIG.attacks[FIG.attackIndex]); updateFigureHud(); return; }
+            }
             if (e.code === KEYS.forward) moveForward = true;
             else if (e.code === KEYS.back) moveBackward = true;
             else if (e.code === KEYS.left) moveLeft = true;
             else if (e.code === KEYS.right) moveRight = true;
-            else if (e.code === KEYS.melee) { if (!e.repeat) doMelee(); }
+            else if (e.code === KEYS.melee) { meleeHeld = true; if (!e.repeat) doMelee(); }
+            else if (e.code === KEYS.cycleMelee) { if (!e.repeat) cycleMeleeWeapon(); }
             else if (e.code === KEYS.sprint) { if (SETTINGS.toggleSprint) { if (!e.repeat) isSprinting = !isSprinting; } else isSprinting = true; }
             else if (e.code === KEYS.reload) { reloadWeapon(); }
             else if (e.code === KEYS.grenade) { throwGrenade(); }
@@ -2673,6 +3206,8 @@
                 const idx = [KEYS.slot1, KEYS.slot2, KEYS.slot3, KEYS.slot4, KEYS.slot5, KEYS.slot6].indexOf(e.code);
                 if (!isReloading && inventory[idx]) {
                     activeSlot = idx;
+                    meleeEquipped = false;
+                    meleeMesh.visible = false;
                     spawnViewModelMesh(inventory[idx]);
                     updateHUD();
                 }
@@ -2680,7 +3215,7 @@
             else if (e.code === KEYS.cycle) {
                 if (!isReloading) {
                     let next = activeSlot;
-                    for (let step = 1; step <= 4; step++) {
+                    for (let step = 1; step <= 6; step++) {
                         const c = (activeSlot + step) % 6;
                         if (inventory[c]) { next = c; break; }
                     }
@@ -2696,6 +3231,11 @@
                 renderLeaderboard();
             }
             else if (e.code === KEYS.jump) {
+                if (slideFrames > 0) {
+                    const slideSpeed = Math.hypot(pvx, pvz);
+                    if (slideSpeed > 0.01) { const boost = Math.min(1.14, 0.72 / slideSpeed); pvx *= boost; pvz *= boost; }
+                    slideFrames = 0; crouching = false;
+                }
                 {
                     const feet = camera.position.y - eyeHeight;
                     const lift = ride ? ride.lift : 0;
@@ -2719,7 +3259,6 @@
             const list = document.getElementById('lb-list');
             list.innerHTML = '';
             const rows = [{ name: localPlayerName + ' (YOU)', color: appearance.color, kills: kills, deaths: deaths, you: true }];
-            netPlayers.forEach(b => rows.push({ name: b.name, color: b.appearance ? b.appearance.color : 0xffaa33, kills: b.kills || 0, deaths: b.deaths || 0 }));
             rows.sort((a, b) => (b.kills - a.kills) || (a.deaths - b.deaths));
             const head = document.createElement('div');
             head.className = 'lb-row';
@@ -2741,6 +3280,7 @@
         }
 
         function fireShot(weapon) {
+            lastPlayerAttackAt = performance.now();
             weapon.ammo--;
             updateHUD();
             lastShotAt = performance.now();
@@ -2770,7 +3310,7 @@
             const dt = Math.min(0.1, (now - lastFrameAt) / 1000);
             lastFrameAt = now;
             const w = inventory[activeSlot];
-            const armed = gameStarted && !isDead && !isReloading && document.pointerLockElement === document.body &&
+            const armed = gameStarted && !isDead && !isReloading && !meleeEquipped && document.pointerLockElement === document.body &&
                           !(ride && ride.type === 'miniCrawler');
             if (w && w.spinUp) {
                 if (fireHeld && armed && w.ammo > 0) chainSpin = Math.min(1, chainSpin + dt / w.spinUp);
@@ -2789,6 +3329,15 @@
 
         document.addEventListener('mousedown', (e) => {
             if (!gameStarted || isDead || isReloading || (ride && ride.type === 'miniCrawler') || document.pointerLockElement !== document.body) return;
+            if (figureMode && figureRole === 'figure') {
+                if (e.button === 0) figureAttack();
+                else if (e.button === 2) figureGrapple();
+                return;
+            }
+            if (meleeEquipped) {
+                if (e.button === 0) { meleeHeld = true; doMelee(); }
+                return;
+            }
             const weapon = inventory[activeSlot];
             if (!weapon) return;
 
@@ -2799,43 +3348,50 @@
                 if (weapon.cooldown && performance.now() - lastShotAt < weapon.fireRate) return;
                 fireShot(weapon);
             } else if (e.button === 2) {
-                isScoped = !isScoped;
-                scopeLevel = 0;
+                // Halo-style scope cycle: first right-click = 3x, next = 10x,
+                // next = exit scope. Weapons without a scope ignore right-click.
+                const zoomLevels = weapon.zoomLevels || [];
+                if (!zoomLevels.length) return;
+                if (!isScoped) {
+                    isScoped = true;
+                    scopeLevel = 0;
+                } else if (scopeLevel < zoomLevels.length - 1) {
+                    scopeLevel++;
+                } else {
+                    isScoped = false;
+                    scopeLevel = 0;
+                }
                 applyScope(weapon);
             }
         });
         document.addEventListener('mouseup', (e) => { if (e.button === 0) fireHeld = false; });
-        document.addEventListener('wheel', (e) => {
-            if (!isScoped || !gameStarted || isDead) return;
-            const w = inventory[activeSlot];
-            if (!w || !w.zoomLevels || w.zoomLevels.length < 2) return;
-            scopeLevel = (scopeLevel + (e.deltaY > 0 ? 1 : -1) + w.zoomLevels.length) % w.zoomLevels.length;
-            applyScope(w);
-        }, { passive: true });
+        document.addEventListener('keyup', (e) => { if (e.code === KEYS.melee) meleeHeld = false; });
+        // Scroll-wheel zoom has deliberately been removed; magnification is changed with RMB.
 
         function damagePlayer(amount = 10, attackerId = null, weapon = 'Unknown') {
-            if (isDead) return;
+            if (isDead || spectator) return;
             playerHealth = Math.max(0, playerHealth - amount);
             updateHUD();
             damageFlash.style.background = 'rgba(255, 0, 50, 0.35)';
             setTimeout(() => damageFlash.style.background = 'rgba(255, 0, 50, 0)', 100);
             if (playerHealth <= 0) {
                 isDead = true; deaths++; updateHUD();
-                if (onlineMode && netSocket) netSocket.emit('died', { killerId: lastHurt.id, weapon: lastHurt.weapon });
+                if (onlineFigure && netSocket) netSocket.emit('died', { killerId: lastHurt.id, weapon: lastHurt.weapon });
                 if (ride) dismountRide(true);
-                document.exitPointerLock();
+                // Keep pointer lock in Figure Mode so the survivor can transition straight into free-fly spectating.
+                if (!(figureMode && figureRole === 'survivor')) document.exitPointerLock();
                 deathScreen.style.display = 'flex';
                 setTimeout(() => {
-                    playerHealth = 100;
+                    if (figureMode && figureRole === 'survivor') { enterSpectator(); return; }
+                    playerHealth = campaignMode ? campaignMaxHealth() : 100;
                     grenadeCount = 3;
                     for (let s = 2; s < 6; s++) inventory[s] = null;
                     inventory[0].ammo = inventory[0].maxAmmo;
                     inventory[1].ammo = inventory[1].maxAmmo;
                     activeSlot = 0;
                     spawnViewModelMesh(inventory[0]);
-                    const sp = getRandomSpawnPoint();
+                    const sp = campaignMode && CAMPAIGN.checkpoint ? CAMPAIGN.checkpoint : getRandomSpawnPoint();
                     camera.position.set(sp.x, eyeHeight, sp.z);
-                    if (onlineMode && netSocket) netSocket.emit('respawn', { x: sp.x, z: sp.z });
                     deathScreen.style.display = 'none'; isDead = false;
                     updateHUD(); document.body.requestPointerLock();
                 }, 2000);
@@ -2896,17 +3452,46 @@
                 if (SETTINGS.showFps) fpsEl.innerText = Math.round(fpsFrames * 1000 / (nowMs - fpsSince)) + ' FPS';
                 fpsFrames = 0; fpsSince = nowMs;
             }
-            if (!gameStarted || isDead) { renderer.render(scene, camera); return; }
+            // Keep the arena hidden until the player deliberately starts a match.
+            // The title screen is the only visible screen on a fresh page load.
+            if (!gameStarted) { renderer.clear(); return; }
+            if (figureMode) updateFigureMode();
+            if (campaignMode && CAMPAIGN.cutscene) { updateCampaignCutscene(); renderer.render(scene, camera); return; }
+            if (campaignMode) { updateCampaign(); updateCampaignFrame(); }
+            if (spectator) { updateSpectator(); renderer.render(scene, camera); return; }
+            if (isDead) { renderer.render(scene, camera); return; }
 
             updatePickups();
             checkPortals();
             updateCrouch();
+            updateMovementEffects();
             updateReloadPose();
             updateWeaponFire();
+            if (meleeHeld && MELEE_WEAPONS[meleeWeaponIndex].type === 'chainsaw' && performance.now() >= meleeReadyAt) doMelee();
             {
+                const activeMelee = MELEE_WEAPONS[meleeWeaponIndex];
                 const swingT = performance.now() - meleeSwingStart;
-                if (swingT < 300) { meleeMesh.visible = true; meleeMesh.rotation.z = Math.sin(swingT / 300 * Math.PI) * -1.1; }
-                else meleeMesh.visible = false;
+                if (swingT < activeMelee.duration) {
+                    const progress = Math.max(0, swingT / activeMelee.duration);
+                    meleeMesh.visible = true;
+                    if (activeMelee.type === 'chainsaw') {
+                        meleeMesh.rotation.x = Math.sin(swingT * 0.05) * 0.035;
+                        meleeMesh.rotation.z = Math.sin(swingT * 0.07) * 0.045;
+                        meleeMesh.position.y = -0.25 + Math.sin(swingT * 0.045) * 0.018;
+                    } else if (activeMelee.type === 'sledgehammer') {
+                        meleeMesh.rotation.x = -Math.sin(progress * Math.PI) * 0.95;
+                        meleeMesh.rotation.z = Math.sin(progress * Math.PI) * -0.35;
+                        meleeMesh.position.y = -0.25 + Math.sin(progress * Math.PI) * 0.08;
+                    } else {
+                        meleeMesh.rotation.z = Math.sin(progress * Math.PI) * -1.25;
+                        meleeMesh.rotation.x = Math.sin(progress * Math.PI) * 0.22;
+                        meleeMesh.position.y = -0.25 + Math.sin(progress * Math.PI) * 0.035;
+                    }
+                } else {
+                    meleeMesh.visible = meleeEquipped;
+                    meleeMesh.rotation.set(0, 0, 0);
+                    meleeMesh.position.set(0.32, -0.25, -0.5);
+                }
             }
 
             if (currentWeaponMesh && currentWeaponMesh.position.z < 0 && !isReloading) {
@@ -2915,6 +3500,8 @@
 
             for (let i = activeBullets.length - 1; i >= 0; i--) {
                 const b = activeBullets[i];
+                if (!b.previousPosition) b.previousPosition = b.mesh.position.clone();
+                b.previousPosition.copy(b.mesh.position);
                 b.mesh.position.add(b.direction);
                 b.distanceTraveled += b.direction.length();
 
@@ -2923,7 +3510,7 @@
                 bots.forEach(bot => {
                     if (!hitDetected && bot.health > 0 && b.mesh.position.distanceTo(bot.mesh.position) < 1.2) {
                         hitDetected = true;
-                        dealDamage(bot, b.damage, b.weaponName);
+                        bot.health -= b.damage;
                         playSound('hit');
                         showHitMarker(false);
 
@@ -2934,11 +3521,16 @@
                             onObjectiveEvent('botKill', { weapon: b.weaponName });
                             despawnCharacter(bot.mesh, bot.meshCore);
                             kills++; updateHUD();
-                            if (!wipeoutMode) setTimeout(() => { const sp = randomOpenSpot(); spawnBot(bot.isShooter, sp.x, sp.z, sp.y); }, 4000);
+                            scheduleBotRespawn(bot);
                         }
                     }
                 });
 
+                if (!hitDetected && ((figureMode && FIG.ai) || (campaignMode && CAMPAIGN.bossActive)) && FIG.group && FIG.bodyHP > 0) hitDetected = checkFigureBulletHit(b);
+                if (!hitDetected && onlineFigure && figureRole !== 'figure' && remoteFig && remoteFig.group && remoteFig.bodyHP > 0) {
+                    hitDetected = withFigRig(remoteFig, () => checkFigureBulletHit(b, true));
+                    if (hitDetected) reportFigureHit(b);
+                }
                 if (hitDetected || b.distanceTraveled >= b.range) {
                     scene.remove(b.mesh);
                     activeBullets.splice(i, 1);
@@ -2979,39 +3571,7 @@
                 }
             }
 
-            bots.forEach(bot => {
-                if (bot.health <= 0 || bot.isRemote) return;
-                const pos = bot.mesh.position;
-                const seesPlayer = pos.distanceTo(camera.position) < 40 &&
-                    clearLineOfSight(pos.x, 1.4, pos.z, camera.position.x, camera.position.y - 0.6, camera.position.z);
-
-                bot.think--;
-                if (!bot.target || bot.think <= 0 || Math.hypot(bot.target.x - pos.x, bot.target.z - pos.z) < 1) {
-                    bot.target = bot.health < 50 ? findCover(bot) : randomOpenSpot();
-                    bot.think = 240 + Math.random() * 240;
-                }
-
-                if (!(bot.isShooter && seesPlayer)) {
-                    const dx = bot.target.x - pos.x, dz = bot.target.z - pos.z;
-                    const len = Math.hypot(dx, dz) || 1;
-                    const nx = pos.x + (dx / len) * botTuning().speed, nz = pos.z + (dz / len) * botTuning().speed;
-                    if (botCanStand(nx, nz)) {
-                        pos.x = nx; pos.z = nz;
-                        bot.mesh.rotation.y = Math.atan2(dx, dz);
-                    } else {
-                        bot.target = null;
-                    }
-                }
-
-                if (bot.isShooter && seesPlayer) {
-                    bot.mesh.lookAt(camera.position.x, pos.y, camera.position.z);
-                    bot.shootCooldown++;
-                    if (bot.shootCooldown > botTuning().fireInterval) {
-                        bot.shootCooldown = 0;
-                        damagePlayer(botTuning().damage, null, 'Bot');
-                    }
-                }
-            });
+            bots.forEach(bot => updateBotAI(bot, performance.now()));
 
             updateRideSpeed();
             const canSteer = document.pointerLockElement === document.body;
@@ -3081,9 +3641,9 @@
 
             updateRideables();
             vehicleRam();
-            updateWipeout();
             updateCoords();
-            renderRide();
+            if (figureMode && figureRole === 'figure') renderFigure();
+            else renderRide();
         }
 
         const coordsEl = document.getElementById('coords');
@@ -3096,6 +3656,1275 @@
                 lastCoordsText = text;
             }
         }
+
+
+
+        // ==================== FIGURE MODE ====================
+        // One spider-creature (the Figure) vs a squad of survivors.
+        // Figure: no weapons, no jumping, no rideables. 16 limbs, three stacked
+        // attacks (PUNCH / CHOKE / THROW) and a special grapple that needs 90s
+        // to recharge. Survivors win by destroying the body - or by blowing off
+        // all 16 limbs first. With no limbs left the Figure can only crawl.
+        // The Figure's state. FIG points at the Figure currently being acted on, so a second
+        // Figure (for online play) can be handled by swapping it in with withFigRig().
+        function makeFigRig() {
+            return {
+                limbs: 16, bodyHP: 0, maxBody: 0,
+                attackIndex: 0, attacks: ['PUNCH', 'CHOKE', 'THROW'],
+                cds: [0, 0, 0], grappleReadyAt: 0, grappling: null,
+                group: null, core: null, bodyMesh: null, legRig: null,
+                limbMeshes: [], flying: [], web: null,
+                ai: false, stunUntil: 0, leap: null, nextAtkAt: 0, nextThrowAt: 0
+            };
+        }
+        let FIG = makeFigRig();
+        function withFigRig(rig, fn) {
+            const previous = FIG;
+            FIG = rig;
+            try { return fn(); } finally { FIG = previous; }
+        }
+        const GRAPPLE_RECHARGE_MS = 90000;   // 1.5 minutes
+        const FIG_LIMB_HP = 45;
+
+        document.getElementById('play-figure').addEventListener('click', () => { onlineFigure = false; openMapPicker('figure'); });
+        document.getElementById('play-online-figure').addEventListener('click', () => {
+            onlineFigure = true;
+            playMenu.style.display = 'none';
+            openFigureRole();
+        });
+        const figureRolePanel = document.getElementById('figure-role-panel');
+        // ---- ONLINE FIGURE: one player is the Figure, the rest are survivors (server: fig- rooms) ----
+        // Step 2: the Figure's position, facing and legs are shared, and everyone sees each other.
+        // Damage between the Figure and survivors is not synced yet.
+        const ONLINE_SERVER_URL = 'https://liteshot-revival-server.onrender.com';
+        let onlineFigure = false, netSocket = null, netId = null, netSendTimer = null;
+        let remoteFig = null, remoteFigId = null, remoteFigMoving = false;
+        const remoteSurvivors = new Map();   // server id -> { group, name }
+        let lastFigSendAt = 0;
+        let lastHurt = { id: null, weapon: 'Unknown' };
+
+        function remoteAppearance(info) {
+            const i = info || {};
+            const color = Number.isFinite(i.color) ? i.color : 0x00ffcc;
+            return {
+                color: color,
+                visor: Number.isFinite(i.visor) ? i.visor : color,
+                helmet: i.helmet || 'visor',
+                armor: i.armor || 'heavy',
+                emblem: typeof i.emblem === 'string' ? i.emblem : undefined
+            };
+        }
+        function addRemoteSurvivor(p) {
+            if (p.id === netId || p.role === 'figure' || remoteSurvivors.has(p.id)) return;
+            const group = new THREE.Group();
+            buildCharacterParts(group, remoteAppearance(p.appearance));
+            group.position.set(p.x, p.y, p.z);
+            scene.add(group);
+            remoteSurvivors.set(p.id, { group: group, name: p.name });
+        }
+        function removeRemoteSurvivor(id) {
+            const r = remoteSurvivors.get(id);
+            if (!r) return;
+            scene.remove(r.group);
+            remoteSurvivors.delete(id);
+        }
+        function removeRemoteFigure() {
+            if (remoteFig && remoteFig.group) scene.remove(remoteFig.group);
+            remoteFig = null; remoteFigId = null; remoteFigMoving = false;
+        }
+        // Builds or updates the Figure that another player controls. Legs that are gone on their side are broken here too.
+        function applyFigureState(s) {
+            if (!remoteFig) {
+                remoteFig = makeFigRig();
+                withFigRig(remoteFig, buildFigureBody);
+            }
+            remoteFigId = s.id;
+            remoteFig.group.position.set(s.x, s.y, s.z);
+            remoteFig.group.rotation.y = s.yaw;
+            remoteFig.bodyHP = s.bodyHP;
+            remoteFigMoving = !!s.moving;
+            (s.limbs || []).forEach((alive, i) => {
+                const limb = remoteFig.limbMeshes[i];
+                if (limb && !alive && limb.alive) withFigRig(remoteFig, () => destroyLimb(limb));
+            });
+        }
+        function sendOnlineFigure(moving) {
+            if (!netSocket || !netSocket.connected || !FIG.group) return;
+            const now = performance.now();
+            if (now - lastFigSendAt < 50) return;
+            lastFigSendAt = now;
+            netSocket.volatile.emit('figureState', {
+                x: FIG.group.position.x, y: FIG.group.position.y, z: FIG.group.position.z,
+                yaw: FIG.group.rotation.y, limbs: FIG.limbMeshes.map(l => l.alive),
+                bodyHP: FIG.bodyHP, moving: moving, attackIndex: FIG.attackIndex
+            });
+        }
+        function sendOnlinePose() {
+            if (!netSocket || !netSocket.connected || figureRole === 'figure') return;
+            netSocket.volatile.emit('state', { x: camera.position.x, y: camera.position.y - eyeHeight, z: camera.position.z, yaw: yaw });
+        }
+        // Survivors' view of the Figure: animate its legs and any flying limbs
+        function updateOnlineFigureView(now) {
+            if (remoteFig && remoteFig.group) {
+                withFigRig(remoteFig, () => {
+                    animateFigureLegs(now, remoteFigMoving ? 1 : 0);
+                    updateFlyingFigureLimbs();
+                });
+            }
+        }
+        function connectOnlineFigure() {
+            if (typeof io === 'undefined') { showAnnouncement('ONLINE NEEDS THE SOCKET.IO SCRIPT'); return; }
+            netSocket = io(ONLINE_SERVER_URL, { transports: ['websocket', 'polling'], timeout: 60000, reconnectionAttempts: 20 });
+            netSocket.on('connect', () => {
+                netId = netSocket.id;
+                netSocket.emit('join', { name: localPlayerName, map: ACTIVE_MAP, figure: true, role: figureRole, appearance: appearance });
+            });
+            netSocket.on('connect_error', () => showAnnouncement('CONNECTING TO ONLINE SERVER... (free servers can take up to a minute to wake)'));
+            netSocket.on('full', () => showAnnouncement('THIS ONLINE MATCH IS FULL'));
+            netSocket.on('joined', (d) => {
+                if (d.role !== figureRole) showAnnouncement('THE FIGURE IS ALREADY TAKEN. GO BACK AND CHOOSE SURVIVOR.');
+            });
+            netSocket.on('roster', (list) => list.forEach(p => {
+                if (p.role === 'figure') remoteFigId = p.id; else addRemoteSurvivor(p);
+            }));
+            netSocket.on('playerJoined', (p) => {
+                if (p.role === 'figure') remoteFigId = p.id; else addRemoteSurvivor(p);
+            });
+            netSocket.on('playerLeft', (id) => {
+                removeRemoteSurvivor(id);
+                if (id === remoteFigId) removeRemoteFigure();
+            });
+            netSocket.on('figureState', applyFigureState);
+            netSocket.on('figureLeft', () => { removeRemoteFigure(); showAnnouncement('THE FIGURE LEFT THE MATCH'); });
+            netSocket.on('states', (list) => list.forEach(s => {
+                const r = remoteSurvivors.get(s.id);
+                if (!r) return;
+                r.group.position.set(s.x, s.y, s.z);
+                r.group.rotation.y = s.yaw;
+                r.group.visible = !s.dead;
+            }));
+            netSocket.on('appearance', (d) => {
+                const r = remoteSurvivors.get(d.id);
+                if (!r) return;
+                [...r.group.children].forEach(c => r.group.remove(c));
+                buildCharacterParts(r.group, remoteAppearance(d.appearance));
+            });
+            netSocket.on('hurt', (d) => {
+                if (isDead || spectator) return;
+                lastHurt = { id: d.from, weapon: d.weapon };
+                damagePlayer(d.amount, d.from, d.weapon);
+            });
+            netSocket.on('figureHurt', (d) => {
+                if (!figureRoundOver) figurePlayerTakeDamage(d.amount);
+            });
+            netSocket.on('roundOver', (d) => endFigureRound(d.title, d.sub, false));
+            netSendTimer = setInterval(sendOnlinePose, 60);
+        }
+        function openFigureRole() { figureRolePanel.style.display = 'flex'; }
+        function confirmFigureRole(role) {
+            if (onlineFigure) {
+                figureRolePanel.style.display = 'none';
+                figureRole = role;
+                startGame('figure');
+                return;
+            }
+            figureRolePanel.style.display = 'none';
+            figureRole = role;
+            if (pendingFigureMap !== ACTIVE_MAP) {
+                let savedTransition = false;
+                try {
+                    sessionStorage.setItem('liteshotNextMap', pendingFigureMap || ACTIVE_MAP);
+                    sessionStorage.setItem('liteshotFigureRolePending', '1');
+                    savedTransition = true;
+                } catch (err) { /* storage can be disabled */ }
+                if (savedTransition) { location.reload(); return; }
+                pendingFigureMap = ACTIVE_MAP;
+            }
+            startGame('figure');
+        }
+        document.getElementById('role-figure').addEventListener('click', () => confirmFigureRole('figure'));
+        document.getElementById('role-survivor').addEventListener('click', () => confirmFigureRole('survivor'));
+        document.getElementById('role-back').addEventListener('click', () => {
+            figureRolePanel.style.display = 'none';
+            onlineFigure = false;
+            if (pendingFigureMap) openMapPicker('figure');
+            else playMenu.style.display = 'flex';
+        });
+        document.getElementById('figure-again').addEventListener('click', () => {
+            try {
+                sessionStorage.setItem('liteshotNextMap', ACTIVE_MAP);
+                sessionStorage.setItem('liteshotFigureRolePending', '1');
+                if (onlineFigure) sessionStorage.setItem('liteshotOnlineFigure', '1');
+            } catch (err) {}
+            location.reload();
+        });
+        try {
+            if (sessionStorage.getItem('liteshotOnlineFigure') === '1') { sessionStorage.removeItem('liteshotOnlineFigure'); onlineFigure = true; }
+            if (sessionStorage.getItem('liteshotFigureRolePending') === '1') {
+                sessionStorage.removeItem('liteshotFigureRolePending');
+                pendingFigureMap = ACTIVE_MAP;
+                setTimeout(openFigureRole, 0);
+            }
+            // Clear the old hand-off flag used by the broken map-picker loop in earlier builds.
+            sessionStorage.removeItem('liteshotFigurePending');
+        } catch (err) {}
+
+        function figureSpeedFactor() {
+            if (!(figureMode && figureRole === 'figure')) return 1;
+            if (FIG.limbs === 0) return 0.12;    // limbless: crawl slowly
+            return 0.35 + 0.65 * FIG.limbs / 16;
+        }
+
+        function buildFigureBody() {
+            if (FIG.group) scene.remove(FIG.group);
+            FIG.limbMeshes = [];
+            const g = new THREE.Group();
+
+            // The player model is about 1.8 units tall. Keep the Figure at roughly
+            // 1.5x that overall size, rather than letting its legs spread across
+            // most of the arena. The leg rig is slightly tucked in independently.
+            g.scale.set(0.62, 0.90, 0.62);
+
+            const shellMat = new THREE.MeshStandardMaterial({ color: 0x14181f, roughness: 0.45, metalness: 0.6, flatShading: true });
+            const legMat = new THREE.MeshStandardMaterial({ color: 0x1d2531, roughness: 0.5, metalness: 0.5, flatShading: true });
+            const glowMat = new THREE.MeshStandardMaterial({ color: 0xff2244, emissive: 0xff2244, emissiveIntensity: 0.9, flatShading: true });
+            const body = new THREE.Mesh(new THREE.SphereGeometry(1.7, 10, 8), shellMat);
+            body.scale.set(1.15, 0.85, 1.35);
+            body.position.y = 1.9;
+            g.add(body);
+            const core = new THREE.Mesh(new THREE.SphereGeometry(0.65, 10, 8), glowMat);
+            core.position.set(0, 1.75, 1.35);
+            g.add(core);
+            for (const side of [-1, 1]) {
+                const fang = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.9, 5), shellMat);
+                fang.position.set(side * 0.55, 1.35, 1.9);
+                fang.rotation.x = 0.9;
+                g.add(fang);
+            }
+
+            const legRig = new THREE.Group();
+            legRig.scale.set(0.72, 1, 0.82);
+            g.add(legRig);
+
+            for (let sideIndex = 0; sideIndex < 2; sideIndex++) {
+                for (let k = 0; k < 8; k++) {
+                    const side = sideIndex === 0 ? -1 : 1;
+                    const limb = {
+                        alive: true,
+                        hp: FIG_LIMB_HP,
+                        hip: null,
+                        knee: null,
+                        side,
+                        k,
+                        phase: k * 0.82 + (sideIndex ? Math.PI : 0),
+                        hitParts: []
+                    };
+                    const hip = new THREE.Group();
+                    hip.position.set(side * 1.15, 2.0 - k * 0.06, 1.2 - k * 0.42);
+
+                    const seg1 = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.14, 1.35, 6), legMat);
+                    seg1.position.set(side * 0.9, 0.35, 0);
+                    seg1.rotation.z = side * 0.96;
+                    hip.add(seg1);
+
+                    const knee = new THREE.Group();
+                    knee.position.set(side * 1.62, 0.72, 0);
+                    hip.add(knee);
+
+                    const seg2 = new THREE.Mesh(new THREE.CylinderGeometry(0.145, 0.115, 1.5, 6), legMat);
+                    seg2.position.set(side * 0.38, -0.68, 0);
+                    seg2.rotation.z = side * -0.35;
+                    knee.add(seg2);
+
+                    const claw = new THREE.Mesh(new THREE.ConeGeometry(0.19, 0.58, 6), legMat);
+                    claw.position.set(side * 0.72, -1.48, 0);
+                    claw.rotation.z = side * 2.6;
+                    knee.add(claw);
+
+                    limb.hip = hip;
+                    limb.knee = knee;
+                    // Collision capsules follow the animated cylinder/cone meshes,
+                    // so players can hit the whole leg, not just its hip joint.
+                    limb.hitParts = [
+                        { mesh: seg1, halfLength: 0.675, radius: 0.22, a: new THREE.Vector3(), b: new THREE.Vector3() },
+                        { mesh: seg2, halfLength: 0.75, radius: 0.19, a: new THREE.Vector3(), b: new THREE.Vector3() },
+                        { mesh: claw, halfLength: 0.29, radius: 0.2, a: new THREE.Vector3(), b: new THREE.Vector3() }
+                    ];
+                    legRig.add(hip);
+                    FIG.limbMeshes.push(limb);
+                }
+            }
+
+            FIG.group = g;
+            FIG.core = core;
+            FIG.bodyMesh = body;
+            FIG.legRig = legRig;
+            scene.add(g);
+        }
+
+        function animateFigureLegs(now, movementAmount = 0) {
+            if (!FIG.group) return;
+            const motion = Math.max(0, Math.min(1, movementAmount));
+            const cycleRate = 0.0045 + motion * 0.008;
+            for (const limb of FIG.limbMeshes) {
+                if (!limb.alive || !limb.hip || !limb.knee) continue;
+                const phase = now * cycleRate + limb.phase;
+                const swing = Math.sin(phase);
+                const lift = Math.max(0, Math.cos(phase));
+                // A small idle twitch keeps the creature alive; movement adds a
+                // stronger alternating spider-walk through the hip and knee joints.
+                limb.hip.rotation.x = swing * (0.075 + motion * 0.25);
+                limb.hip.rotation.z = limb.side * (0.025 + lift * motion * 0.055);
+                limb.knee.rotation.x = 0.04 + lift * (0.10 + motion * 0.30);
+            }
+        }
+
+        function destroyLimb(limb) {
+            if (!limb.alive) return;
+            limb.alive = false;
+            FIG.limbs = Math.max(0, FIG.limbs - 1);
+            const worldPosition = new THREE.Vector3();
+            const worldQuaternion = new THREE.Quaternion();
+            const worldScale = new THREE.Vector3();
+            FIG.group.updateMatrixWorld(true);
+            limb.hip.getWorldPosition(worldPosition);
+            limb.hip.getWorldQuaternion(worldQuaternion);
+            limb.hip.getWorldScale(worldScale);
+            if (limb.hip.parent) limb.hip.parent.remove(limb.hip);
+            limb.hip.position.copy(worldPosition);
+            limb.hip.quaternion.copy(worldQuaternion);
+            limb.hip.scale.copy(worldScale);
+            scene.add(limb.hip);
+            FIG.flying.push({ obj: limb.hip, vx: (Math.random() - 0.5) * 0.3, vy: 0.25, vz: (Math.random() - 0.5) * 0.3, life: 90 });
+            playSound('boom');
+            if (FIG.limbs === 0) {
+                showAnnouncement('ALL LIMBS DESTROYED — BODY EXPOSED');
+                playSound('kill');
+            }
+            updateFigureHud();
+        }
+
+        function figurePlayerTakeDamage(amount) {
+            damageFlash.style.background = 'rgba(255, 0, 50, 0.35)';
+            setTimeout(() => damageFlash.style.background = 'rgba(255, 0, 50, 0)', 100);
+            if (FIG.limbs > 0 && Math.random() < 0.6) {
+                const alive = FIG.limbMeshes.filter(l => l.alive);
+                const limb = alive[(Math.random() * alive.length) | 0];
+                limb.hp -= amount;
+                playSound('hit');
+                if (limb.hp <= 0) destroyLimb(limb);
+            } else {
+                FIG.bodyHP -= amount;
+                playSound('hit');
+            }
+            if (FIG.bodyHP <= 0) {
+                if (FIG.group) { scene.remove(FIG.group); FIG.group = null; }
+                endFigureRound('SURVIVORS WIN', 'Your body was destroyed.');
+            }
+            updateFigureHud();
+        }
+
+        function aiFigureTakeDamage(amount) {
+            if (!FIG.group || FIG.bodyHP <= 0) return;
+            if (FIG.limbs > 0 && Math.random() < 0.6) {
+                const alive = FIG.limbMeshes.filter(l => l.alive);
+                const limb = alive[(Math.random() * alive.length) | 0];
+                limb.hp -= amount;
+                if (limb.hp <= 0) destroyLimb(limb);
+            } else {
+                FIG.bodyHP -= amount;
+            }
+            if (FIG.bodyHP <= 0) killAIFigure();
+            updateFigureHud();
+        }
+
+        const _figV = new THREE.Vector3();
+        const _figBulletPoint = new THREE.Vector3();
+
+        function pointSegmentDistanceSquared(point, start, end) {
+            const abx = end.x - start.x, aby = end.y - start.y, abz = end.z - start.z;
+            const apx = point.x - start.x, apy = point.y - start.y, apz = point.z - start.z;
+            const lengthSq = abx * abx + aby * aby + abz * abz;
+            const t = lengthSq > 0 ? Math.max(0, Math.min(1, (apx * abx + apy * aby + apz * abz) / lengthSq)) : 0;
+            const dx = point.x - (start.x + abx * t);
+            const dy = point.y - (start.y + aby * t);
+            const dz = point.z - (start.z + abz * t);
+            return dx * dx + dy * dy + dz * dz;
+        }
+
+        function bulletPassesNearSegment(b, start, end, radius) {
+            const from = b.previousPosition || b.mesh.position;
+            const to = b.mesh.position;
+            // Bullets move quickly; sample the full frame path so thin legs cannot
+            // be skipped between frames.
+            for (let step = 0; step <= 9; step++) {
+                _figBulletPoint.copy(from).lerp(to, step / 9);
+                if (pointSegmentDistanceSquared(_figBulletPoint, start, end) <= radius * radius) return true;
+            }
+            return false;
+        }
+
+        function checkFigureBulletHit(b, dryRun = false) {
+            if (!FIG.group || FIG.bodyHP <= 0) return false;
+            FIG.group.updateMatrixWorld(true);
+
+            for (const limb of FIG.limbMeshes) {
+                if (!limb.alive) continue;
+                for (const part of limb.hitParts) {
+                    part.mesh.localToWorld(part.a.set(0, -part.halfLength, 0));
+                    part.mesh.localToWorld(part.b.set(0, part.halfLength, 0));
+                    if (bulletPassesNearSegment(b, part.a, part.b, part.radius + 0.11)) {
+                        if (dryRun) return true;
+                        limb.hp -= b.damage;
+                        playSound('hit');
+                        showHitMarker(limb.hp <= 0);
+                        if (limb.hp <= 0) destroyLimb(limb);
+                        return true;
+                    }
+                }
+            }
+
+            if (FIG.bodyMesh && !(campaignMode && CAMPAIGN.bossActive && FIG.limbs > 0)) {
+                FIG.bodyMesh.getWorldPosition(_figV);
+                const bodyRadius = 2.3 * FIG.group.scale.z;
+                const from = b.previousPosition || b.mesh.position;
+                const to = b.mesh.position;
+                for (let step = 0; step <= 9; step++) {
+                    _figBulletPoint.copy(from).lerp(to, step / 9);
+                    if (_figBulletPoint.distanceToSquared(_figV) <= bodyRadius * bodyRadius) {
+                        if (dryRun) return true;
+                        FIG.bodyHP -= b.damage;
+                        playSound('hit');
+                        showHitMarker(false);
+                        if (FIG.bodyHP <= 0) killAIFigure();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function killAIFigure() {
+            if (campaignMode && CAMPAIGN.bossActive) { completeCampaignBoss(); return; }
+            if (figureRoundOver) return;
+            showHitMarker(true);
+            playSound('boom');
+            endFigureRound('SURVIVORS WIN', 'The Figure has been destroyed.');
+            if (FIG.group) { scene.remove(FIG.group); FIG.group = null; }
+        }
+
+        function endFigureRound(title, sub, broadcast = true) {
+            if (figureRoundOver) return;
+            figureRoundOver = true;
+            if (broadcast && onlineFigure && netSocket && netSocket.connected) netSocket.emit('roundOver', { title: title, sub: sub });
+            try { document.exitPointerLock(); } catch (err) {}
+            document.getElementById('figure-end-title').textContent = title;
+            document.getElementById('figure-end-sub').textContent = sub;
+            document.getElementById('figure-end-panel').style.display = 'flex';
+        }
+
+        function maybeEndFigureRound() {
+            if (!figureMode || figureRoundOver) return;
+            if (onlineFigure) return;
+            // In Survivor role, the human player is part of the survivor team too.
+            // Do not award the Figure a win just because the bot teammates are gone.
+            if (figureRole === 'survivor' && !isDead && !spectator) return;
+            if (!bots.some(b => b.health > 0)) endFigureRound('FIGURE WINS', 'All survivors have been eliminated.');
+        }
+
+        function scheduleBotRespawn(bot) {
+            if (campaignMode) return;
+            if (figureMode) { maybeEndFigureRound(); return; }
+            setTimeout(() => { const sp = randomOpenSpot(); spawnBot(bot.isShooter, sp.x, sp.z, sp.y); }, 4000);
+        }
+
+        function dealBotDamage(amount, weapon) {
+            if (!figureMode) { damagePlayer(amount, null, weapon); return; }
+            if (figureRole === 'figure') figurePlayerTakeDamage(amount);
+            else aiFigureTakeDamage(amount);
+        }
+
+        function getBotTargetPos() {
+            if (figureMode && figureRole === 'survivor' && FIG.ai && FIG.group && FIG.bodyHP > 0) return FIG.group.position;
+            return camera.position;
+        }
+
+        function startFigureGame() {
+            figureRoundOver = false;
+            spectator = false;
+            FIG.limbs = 16;
+            FIG.cds = [0, 0, 0];
+            FIG.attackIndex = 0;
+            FIG.grappleReadyAt = 0;
+            FIG.grappling = null;
+            FIG.leap = null;
+            FIG.flying = [];
+            FIG.stunUntil = 0;
+            FIG.nextAtkAt = 0;
+            FIG.nextThrowAt = 0;
+            buildFigureBody();
+            if (figureRole === 'figure') {
+                FIG.ai = false;
+                FIG.bodyHP = FIG.maxBody = 1200;
+                for (let s = 0; s < 6; s++) document.getElementById('slot-' + s).style.display = 'none';
+                meleeMesh.visible = false;
+                showAnnouncement('YOU ARE THE FIGURE — HUNT THEM ALL');
+            } else {
+                FIG.ai = true;
+                FIG.bodyHP = FIG.maxBody = 1500;
+                const sp = randomOpenSpot();
+                // House maps have basement, ground and first-floor elevations; preserve the selected floor.
+                FIG.group.position.set(sp.x, Number.isFinite(sp.y) ? sp.y : 0, sp.z);
+                objectiveEl.style.display = 'block';
+            }
+            updateFigureHud();
+        }
+
+        // Online Figure strike: picks the nearest living survivor in range and sends the hit to the server
+        function onlineFigureStrike(i) {
+            const dmg = [50, 32, 65][i];
+            const ranges = [3.6, 4.0, 3.8];
+            let bestId = null, bestD = ranges[i];
+            remoteSurvivors.forEach((r, id) => {
+                if (!r.group.visible) return;
+                const d = Math.hypot(r.group.position.x - camera.position.x, r.group.position.z - camera.position.z);
+                if (d < bestD) { bestD = d; bestId = id; }
+            });
+            if (!bestId) { playSound('reload'); return; }
+            playSound('hit');
+            showHitMarker(false);
+            if (netSocket && netSocket.connected) netSocket.emit('hit', { targetId: bestId, amount: dmg, weapon: FIG.attacks[i] });
+        }
+        // A survivor's bullet hit the online Figure: the Figure's controller applies it
+        function reportFigureHit(b) {
+            showHitMarker(false);
+            if (netSocket && netSocket.connected) netSocket.emit('figureHit', { amount: b.damage, weapon: b.weaponName });
+        }
+
+        function figureAttack() {
+            if (!gameStarted || isDead || document.pointerLockElement !== document.body) return;
+            const now = performance.now();
+            const i = FIG.attackIndex;
+            const cds = [420, 1500, 2700];
+            if (now < FIG.cds[i]) return;
+            FIG.cds[i] = now + cds[i];
+            lastPlayerAttackAt = now;
+            if (onlineFigure) { onlineFigureStrike(i); return; }
+            const ranges = [3.6, 4.0, 3.8];
+            const dir = new THREE.Vector3();
+            camera.getWorldDirection(dir);
+            let target = null, bd = ranges[i];
+            bots.forEach(b => {
+                if (b.health <= 0) return;
+                const d = Math.hypot(b.mesh.position.x - camera.position.x, b.mesh.position.z - camera.position.z);
+                if (d < bd) { bd = d; target = b; }
+            });
+            if (!target) { playSound('reload'); return; }
+            const name = FIG.attacks[i];
+            if (i === 0) {
+                target.health -= 50;
+                target.knockbackX = (target.knockbackX || 0) + dir.x * 0.28;
+                target.knockbackZ = (target.knockbackZ || 0) + dir.z * 0.28;
+            } else if (i === 1) {
+                target.health -= 32;
+                target.stunUntil = now + 1700;
+            } else {
+                target.health -= 65;
+                target.knockbackX = (target.knockbackX || 0) + dir.x * 2.6;
+                target.knockbackZ = (target.knockbackZ || 0) + dir.z * 2.6;
+            }
+            target.lastKnown = { x: camera.position.x, z: camera.position.z };
+            target.lastSeenAt = now;
+            target.state = 'combat';
+            playSound('hit');
+            showHitMarker(false);
+            if (target.health <= 0) {
+                playSound('kill');
+                addKillfeedEntry(localPlayerName, target.name, name);
+                showHitMarker(true);
+                despawnCharacter(target.mesh, target.meshCore);
+                kills++;
+                updateHUD();
+                scheduleBotRespawn(target);
+            }
+        }
+
+        function figureGrapple() {
+            if (!gameStarted || isDead || document.pointerLockElement !== document.body) return;
+            const now = performance.now();
+            if (FIG.grappling) return;
+            if (now < FIG.grappleReadyAt) {
+                showAnnouncement('GRAPPLE RECHARGING: ' + Math.ceil((FIG.grappleReadyAt - now) / 1000) + 's');
+                return;
+            }
+            FIG.grappleReadyAt = now + GRAPPLE_RECHARGE_MS;
+            const dir = new THREE.Vector3();
+            camera.getWorldDirection(dir);
+            const to = camera.position.clone().addScaledVector(dir, 34);
+            to.y = Math.max(getFloorHeight(to.x, to.z, camera.position.y - eyeHeight), 0) + 0.5;
+            FIG.grappling = { from: camera.position.clone(), to: to, t: 0 };
+            const geo = new THREE.BufferGeometry().setFromPoints([camera.position.clone(), to]);
+            FIG.web = new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0xdddddd }));
+            scene.add(FIG.web);
+            pvx = 0; pvz = 0;
+            playSound('boom');
+            showAnnouncement('GRAPPLE!');
+        }
+
+        function renderFigure() {
+            const saved = camera.position.clone();
+            const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+            camera.position.addScaledVector(fwd, -7);
+            camera.position.y += 3.0;
+            renderer.render(scene, camera);
+            camera.position.copy(saved);
+        }
+
+        function enterSpectator() {
+            spectator = true;
+            deathScreen.style.display = 'none';
+            hud.style.display = 'none';
+            crosshair.style.display = 'none';
+            showAnnouncement('YOU DIED — SPECTATING (FREE FLY)');
+            if (document.pointerLockElement !== document.body && typeof document.body.requestPointerLock === 'function') {
+                try {
+                    const request = document.body.requestPointerLock();
+                    if (request && typeof request.catch === 'function') request.catch(() => {});
+                } catch (err) {}
+            }
+            maybeEndFigureRound();
+        }
+
+        function updateSpectator() {
+            const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+            const right = new THREE.Vector3(1, 0, 0).applyQuaternion(camera.quaternion);
+            const sp = 0.55;
+            if (moveForward) camera.position.addScaledVector(fwd, sp * frameScale);
+            if (moveBackward) camera.position.addScaledVector(fwd, -sp * frameScale);
+            if (moveLeft) camera.position.addScaledVector(right, -sp * frameScale);
+            if (moveRight) camera.position.addScaledVector(right, sp * frameScale);
+        }
+
+        let lastFigHud = 0;
+        function updateFigureHud() {
+            const now = performance.now();
+            if (now - lastFigHud < 200) return;
+            lastFigHud = now;
+            if (!figureMode) {
+                if (campaignMode) updateCampaignHUD(true);
+                return;
+            }
+            if (figureRole === 'figure') {
+                healthEl.innerText = `BODY: ${Math.max(0, Math.ceil(FIG.bodyHP))}`;
+                ammoEl.innerText = `LIMBS: ${FIG.limbs}/16`;
+                const gr = Math.max(0, FIG.grappleReadyAt - now);
+                grenadeEl.innerText = gr > 0 ? `GRAPPLE: ${Math.ceil(gr / 1000)}s` : 'GRAPPLE READY [RMB]';
+                const md = document.getElementById('melee-display');
+                if (md) md.innerText = `ATTACK: ${FIG.attacks[FIG.attackIndex]} [F / LMB] · SWITCH [V]`;
+                killCountEl.innerText = kills;
+                deathCountEl.innerText = deaths;
+            } else {
+                objectiveEl.style.display = 'block';
+                objectiveEl.innerHTML = `<div class="obj-title">FIGURE MODE</div><div class="obj-text">FIGURE LIMBS: ${FIG.limbs}/16 · BODY: ${Math.max(0, Math.ceil(FIG.bodyHP))}</div><div class="obj-prog">Blow off the limbs, then kill the body.</div>`;
+            }
+        }
+
+        function updateFlyingFigureLimbs() {
+            for (let i = FIG.flying.length - 1; i >= 0; i--) {
+                const f = FIG.flying[i];
+                f.vy -= 0.012 * frameScale;
+                f.obj.position.x += f.vx * frameScale;
+                f.obj.position.y += f.vy * frameScale;
+                f.obj.position.z += f.vz * frameScale;
+                f.obj.rotation.x += 0.08 * frameScale;
+                f.obj.rotation.z += 0.06 * frameScale;
+                f.life -= frameScale;
+                if (f.life <= 0 || f.obj.position.y < -30) { scene.remove(f.obj); FIG.flying.splice(i, 1); }
+            }
+        }
+        function updateFigureMode() {
+            const now = performance.now();
+            if (onlineFigure && figureRole !== 'figure') { updateOnlineFigureView(now); return; }
+            updateFlyingFigureLimbs();
+            if (!FIG.group) return;
+            if (figureRole === 'figure') {
+                const feet = camera.position.y - eyeHeight;
+                const fy = getFloorHeight(camera.position.x, camera.position.z, feet);
+                FIG.group.position.set(camera.position.x, fy, camera.position.z);
+                FIG.group.rotation.y = yaw + Math.PI;
+                const playerIsMoving = moveForward || moveBackward || moveLeft || moveRight ||
+                    Math.hypot(pvx, pvz) > 0.015 || !!FIG.grappling;
+                animateFigureLegs(now, playerIsMoving ? 1 : 0);
+                if (onlineFigure) sendOnlineFigure(playerIsMoving);
+                if (FIG.grappling) {
+                    const g = FIG.grappling;
+                    g.t += frameScale / 24;
+                    const t = Math.min(1, g.t);
+                    camera.position.x = g.from.x + (g.to.x - g.from.x) * t;
+                    camera.position.z = g.from.z + (g.to.z - g.from.z) * t;
+                    camera.position.y = getFloorHeight(camera.position.x, camera.position.z, feet) + eyeHeight;
+                    if (FIG.web) FIG.web.geometry.setFromPoints([new THREE.Vector3(camera.position.x, camera.position.y - 0.5, camera.position.z), g.to]);
+                    if (t >= 1) {
+                        if (FIG.web) { scene.remove(FIG.web); FIG.web = null; }
+                        FIG.grappling = null;
+                        pvx = 0; pvz = 0;
+                    }
+                }
+                updateFigureHud();
+                return;
+            }
+            // ---- AI figure hunts the survivors ----
+            const gp = FIG.group.position;
+            let tx = camera.position.x, tz = camera.position.z, targetBot = null;
+            let best = Math.hypot(camera.position.x - gp.x, camera.position.z - gp.z);
+            bots.forEach(b => {
+                if (b.health <= 0) return;
+                const d = Math.hypot(b.mesh.position.x - gp.x, b.mesh.position.z - gp.z);
+                if (d < best) { best = d; tx = b.mesh.position.x; tz = b.mesh.position.z; targetBot = b; }
+            });
+            let figureAIMoving = false;
+            if (!(FIG.stunUntil && now < FIG.stunUntil) && !FIG.leap) {
+                const spd = FIG.limbs > 0 ? 0.048 * (0.35 + 0.65 * FIG.limbs / 16) : 0.016;
+                if (best > 3.1) {
+                    figureAIMoving = true;
+                    const dx = tx - gp.x, dz = tz - gp.z, len = Math.hypot(dx, dz) || 1;
+                    const nx = gp.x + dx / len * spd * frameScale;
+                    const nz = gp.z + dz / len * spd * frameScale;
+                    if (botCanStand(nx, nz) && Math.abs(nx) < ARENA && Math.abs(nz) < ARENA) { gp.x = nx; gp.z = nz; }
+                }
+                if (best < 3.6 && now >= FIG.nextAtkAt) {
+                    FIG.nextAtkAt = now + 900;
+                    playSound('hit');
+                    if (targetBot) {
+                        targetBot.health -= 40;
+                        const kx = targetBot.mesh.position.x - gp.x, kz = targetBot.mesh.position.z - gp.z, kl = Math.hypot(kx, kz) || 1;
+                        targetBot.knockbackX = (targetBot.knockbackX || 0) + kx / kl * 0.25;
+                        targetBot.knockbackZ = (targetBot.knockbackZ || 0) + kz / kl * 0.25;
+                        if (targetBot.health <= 0) {
+                            playSound('kill');
+                            addKillfeedEntry('FIGURE', targetBot.name, 'CLAW');
+                            despawnCharacter(targetBot.mesh, targetBot.meshCore);
+                            scheduleBotRespawn(targetBot);
+                        }
+                    } else if (!isDead && !spectator) {
+                        damagePlayer(26, null, 'Figure');
+                    }
+                }
+                if (best < 4.2 && now >= FIG.nextThrowAt) {
+                    FIG.nextThrowAt = now + 9000;
+                    playSound('boom');
+                    if (targetBot) {
+                        targetBot.health -= 70;
+                        const kx = targetBot.mesh.position.x - gp.x, kz = targetBot.mesh.position.z - gp.z, kl = Math.hypot(kx, kz) || 1;
+                        targetBot.knockbackX = (targetBot.knockbackX || 0) + kx / kl * 2.2;
+                        targetBot.knockbackZ = (targetBot.knockbackZ || 0) + kz / kl * 2.2;
+                        if (targetBot.health <= 0) {
+                            addKillfeedEntry('FIGURE', targetBot.name, 'THROW');
+                            despawnCharacter(targetBot.mesh, targetBot.meshCore);
+                            scheduleBotRespawn(targetBot);
+                        }
+                    } else if (!isDead && !spectator) {
+                        damagePlayer(40, null, 'Figure');
+                    }
+                }
+                if (best > 16 && now >= FIG.grappleReadyAt) {
+                    FIG.grappleReadyAt = now + GRAPPLE_RECHARGE_MS;
+                    const dx = tx - gp.x, dz = tz - gp.z, len = Math.hypot(dx, dz) || 1;
+                    FIG.leap = { fx: gp.x, fz: gp.z, tx: tx - dx / len * 4, tz: tz - dz / len * 4, t: 0 };
+                    playSound('boom');
+                }
+            }
+            if (FIG.leap) {
+                FIG.leap.t += frameScale / 26;
+                const t = Math.min(1, FIG.leap.t);
+                gp.x = FIG.leap.fx + (FIG.leap.tx - FIG.leap.fx) * t;
+                gp.z = FIG.leap.fz + (FIG.leap.tz - FIG.leap.fz) * t;
+                if (t >= 1) FIG.leap = null;
+            }
+            gp.y = getFloorHeight(gp.x, gp.z, gp.y + 1);
+            FIG.group.rotation.y = Math.atan2(tx - gp.x, tz - gp.z);
+            animateFigureLegs(now, (figureAIMoving || FIG.leap) ? 1 : 0);
+            updateFigureHud();
+        }
+        // ================== END FIGURE MODE ==================
+
+
+        // ==================== GREYBRIDGE CAMPAIGN ====================
+        // Campaign runs on its own connected city map while reusing LiteShot's
+        // FPS movement, weapons, collision, upgrades HUD and the existing Figure rig.
+        const CAMPAIGN = {
+            saveKey: 'liteshotGreybridgeCampaignV1',
+            step: 0, healthUpgrades: 0, speedUpgrades: 0, collected: [], complete: false,
+            checkpoint: {x:65,z:455}, target: null, marker: null, upgradeItems: [],
+            actor: null, cutscene: null, needsOpening: false, bossActive: false,
+            bossNextAttack: 0, bossNextThrow: 0, stalkerUnlocked: false,
+            stalkerVisibleUntil: 0, nextStalkAt: 0, lastHudAt: 0, guardWaveSpawned: false,
+            killProgress: 0
+        };
+        const campaignPromptEl = document.getElementById('campaign-interact-prompt');
+        const campaignCaseLabel = document.getElementById('campaign-case-label');
+        const campaignIntroPanel = document.getElementById('campaign-intro-panel');
+        const campaignCutscenePanel = document.getElementById('campaign-cutscene');
+        const campaignCutsceneCaption = document.getElementById('campaign-cine-caption');
+        const campaignCompletePanel = document.getElementById('campaign-complete-panel');
+        const CAMPAIGN_STEPS = [
+            {chapter:1, name:'THE BREACH', district:'RESEARCH DISTRICT', text:'Reach the Research District', kind:'reach', x:260, z:-205, radius:18},
+            {chapter:1, name:'THE BREACH', district:'RESEARCH DISTRICT', text:'Inspect the damaged security gate', kind:'interact', x:260, z:-205, prompt:'PRESS E  ·  INSPECT THE GATE', clue:'The gate was forced open from the inside.'},
+            {chapter:1, name:'THE BREACH', district:'F-01 LABORATORY', text:'Recover the F-01 containment log', kind:'interact', x:260, z:-260, prompt:'PRESS E  ·  RECOVER THE LOG', clue:'The final entry says the subject learned to recognise individual people.', cutscene:'firstSighting'},
+            {chapter:2, name:'NO SIGHTINGS', district:'OLD TOWN', text:'Search Old Town for Dr. Vale', kind:'reach', x:-195, z:260, radius:18, cutscene:'rooftop'},
+            {chapter:2, name:'NO SIGHTINGS', district:'OLD TOWN', text:'Recover the missing researcher’s recorder', kind:'interact', x:-325, z:260, prompt:'PRESS E  ·  PLAY RECORDER', clue:'Dr. Vale recorded footsteps on the roof — eight pairs, moving as one.'},
+            {chapter:3, name:'SOMETHING OUT THERE', district:'INDUSTRIAL YARD', text:'Investigate the industrial yard', kind:'reach', x:-195, z:-260, radius:18, cutscene:'chase'},
+            {chapter:3, name:'SOMETHING OUT THERE', district:'INDUSTRIAL YARD', text:'Eliminate the 3 security units', kind:'clear', target:3, spawn:'industrial'},
+            {chapter:3, name:'SOMETHING OUT THERE', district:'INDUSTRIAL YARD', text:'Inspect the damaged transport', kind:'interact', x:-325, z:-260, prompt:'PRESS E  ·  SEARCH THE TRANSPORT', clue:'The transport was carrying a second containment pod. It is empty.'},
+            {chapter:4, name:'PROJECT F-01', district:'RESEARCH DISTRICT', text:'Return to the Research District', kind:'reach', x:260, z:-205, radius:18, cutscene:'return'},
+            {chapter:4, name:'PROJECT F-01', district:'F-01 LABORATORY', text:'Access the archived experiment files', kind:'interact', x:286, z:-260, prompt:'PRESS E  ·  ACCESS THE ARCHIVE', clue:'F-01 was designed to identify, remember and pursue selected targets. Tony’s name appears in the original observation file.', cutscene:'truth'},
+            {chapter:5, name:'THE LAST HUNT', district:'DOWNTOWN', text:'Reach the Central Exchange', kind:'reach', x:65, z:65, radius:18, cutscene:'hunt'},
+            {chapter:5, name:'THE LAST HUNT', district:'DOWNTOWN', text:'Activate the emergency broadcast', kind:'interact', x:65, z:-65, prompt:'PRESS E  ·  ACTIVATE THE BROADCAST', clue:'The city evacuation channel is live. The Figure has been drawn back to the laboratory.'},
+            {chapter:6, name:'THE FIGURE', district:'F-01 LABORATORY', text:'Return to the original containment lab', kind:'reach', x:260, z:-205, radius:18, cutscene:'finalApproach'},
+            {chapter:6, name:'THE FIGURE', district:'F-01 LABORATORY', text:'Destroy the Figure', kind:'boss'}
+        ];
+
+        function campaignMaxHealth() { return 100 + CAMPAIGN.healthUpgrades * 25; }
+        function campaignSpeedMultiplier() { return 1 + CAMPAIGN.speedUpgrades * 0.12; }
+        function loadCampaignSave() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(CAMPAIGN.saveKey) || 'null');
+                if (saved && typeof saved === 'object') {
+                    CAMPAIGN.step = Math.max(0, Math.min(CAMPAIGN_STEPS.length - 1, Number(saved.step) || 0));
+                    CAMPAIGN.healthUpgrades = Math.max(0, Math.min(8, Number(saved.healthUpgrades) || 0));
+                    CAMPAIGN.speedUpgrades = Math.max(0, Math.min(8, Number(saved.speedUpgrades) || 0));
+                    CAMPAIGN.collected = Array.isArray(saved.collected) ? saved.collected.filter(x => typeof x === 'string') : [];
+                    CAMPAIGN.complete = !!saved.complete;
+                    CAMPAIGN.checkpoint = saved.checkpoint && Number.isFinite(saved.checkpoint.x) && Number.isFinite(saved.checkpoint.z)
+                        ? {x:saved.checkpoint.x,z:saved.checkpoint.z} : {x:65,z:455};
+                }
+            } catch (err) { /* use a clean campaign save */ }
+        }
+        function saveCampaign() {
+            try {
+                localStorage.setItem(CAMPAIGN.saveKey, JSON.stringify({
+                    step: CAMPAIGN.step, healthUpgrades: CAMPAIGN.healthUpgrades, speedUpgrades: CAMPAIGN.speedUpgrades,
+                    collected: CAMPAIGN.collected, complete: CAMPAIGN.complete, checkpoint: CAMPAIGN.checkpoint
+                }));
+            } catch (err) { /* local save unavailable; current session still works */ }
+        }
+        function resetCampaignSave() {
+            CAMPAIGN.step = 0; CAMPAIGN.healthUpgrades = 0; CAMPAIGN.speedUpgrades = 0;
+            CAMPAIGN.collected = []; CAMPAIGN.complete = false; CAMPAIGN.checkpoint = {x:65,z:455};
+            CAMPAIGN.guardWaveSpawned = false; CAMPAIGN.killProgress = 0; CAMPAIGN.bossActive = false;
+            try { localStorage.removeItem(CAMPAIGN.saveKey); } catch (err) {}
+        }
+        function showCampaignIntro() {
+            loadCampaignSave();
+            const hasSave = (() => { try { return !!localStorage.getItem(CAMPAIGN.saveKey); } catch (err) { return false; } })();
+            document.getElementById('campaign-continue').textContent = hasSave && !CAMPAIGN.complete ? 'CONTINUE INVESTIGATION' : 'BEGIN INVESTIGATION';
+            campaignIntroPanel.style.display = 'flex';
+            playMenu.style.display = 'none';
+            blocker.style.display = 'none';
+        }
+        function launchCampaign() {
+            if (ACTIVE_MAP !== 'city') {
+                try {
+                    sessionStorage.setItem('liteshotNextMap','city');
+                    sessionStorage.setItem('liteshotCampaignIntro','1');
+                } catch (err) { showStartError('This browser blocked the city-map handoff. Allow session storage and try again.'); return; }
+                location.reload();
+                return;
+            }
+            showCampaignIntro();
+        }
+        document.getElementById('play-campaign').addEventListener('click', launchCampaign);
+        document.getElementById('campaign-continue').addEventListener('click', () => {
+            loadCampaignSave(); campaignIntroPanel.style.display='none'; startGame('campaign');
+        });
+        document.getElementById('campaign-new').addEventListener('click', () => {
+            resetCampaignSave(); campaignIntroPanel.style.display='none'; startGame('campaign');
+        });
+        document.getElementById('campaign-back').addEventListener('click', () => {
+            campaignIntroPanel.style.display='none'; blocker.style.display='flex'; playMenu.style.display='flex';
+        });
+        document.getElementById('campaign-cutscene-skip').addEventListener('click', finishCampaignCutscene);
+        document.getElementById('campaign-replay').addEventListener('click', () => {
+            resetCampaignSave();
+            try { sessionStorage.setItem('liteshotNextMap','city'); sessionStorage.setItem('liteshotCampaignIntro','1'); } catch(err) {}
+            location.reload();
+        });
+        document.getElementById('campaign-home').addEventListener('click', () => location.reload());
+
+        function createCampaignActor() {
+            if (CAMPAIGN.actor) return CAMPAIGN.actor;
+            const actor = new THREE.Group();
+            const coat = new THREE.MeshStandardMaterial({color:0x202b38,roughness:0.8});
+            const dark = new THREE.MeshStandardMaterial({color:0x111820,roughness:0.8});
+            const skin = new THREE.MeshStandardMaterial({color:0xb98e72,roughness:0.9});
+            const brass = new THREE.MeshStandardMaterial({color:0x9f753d,metalness:0.65,roughness:0.35});
+            const torso = new THREE.Mesh(new THREE.BoxGeometry(0.72,0.95,0.42),coat); torso.position.y=1.18; actor.add(torso);
+            const shirt = new THREE.Mesh(new THREE.BoxGeometry(0.24,0.6,0.035),new THREE.MeshStandardMaterial({color:0xc4c8c8})); shirt.position.set(0,1.2,-0.23); actor.add(shirt);
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.24,10,8),skin); head.position.y=1.9; actor.add(head);
+            const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.27,0.27,0.11,8),dark); cap.position.y=2.12; actor.add(cap);
+            const brim = new THREE.Mesh(new THREE.BoxGeometry(0.42,0.045,0.2),dark); brim.position.set(0,2.08,-0.18); actor.add(brim);
+            const badge = new THREE.Mesh(new THREE.BoxGeometry(0.12,0.14,0.035),brass); badge.position.set(0.25,1.55,-0.23); actor.add(badge);
+            const arms=[],legs=[];
+            for(const side of [-1,1]) {
+                const arm=new THREE.Group(); arm.position.set(side*0.46,1.55,0); actor.add(arm);
+                const upper=new THREE.Mesh(new THREE.BoxGeometry(0.19,0.58,0.2),coat); upper.position.y=-0.27; arm.add(upper); arms.push(arm);
+                const leg=new THREE.Group(); leg.position.set(side*0.2,0.72,0); actor.add(leg);
+                const lower=new THREE.Mesh(new THREE.BoxGeometry(0.22,0.72,0.24),dark); lower.position.y=-0.35; leg.add(lower); legs.push(leg);
+            }
+            actor.userData.legs=legs; actor.userData.arms=arms; actor.visible=false; scene.add(actor); CAMPAIGN.actor=actor;
+            return actor;
+        }
+        function createCampaignMarker(x,z,kind='objective') {
+            if (CAMPAIGN.marker) scene.remove(CAMPAIGN.marker);
+            const g=new THREE.Group(); g.position.set(x,0,z);
+            const color=kind==='boss'?0xff334e:kind==='interact'?0xffb44a:0x21e0cf;
+            const mat=new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.88});
+            const ring=new THREE.Mesh(new THREE.TorusGeometry(2.3,0.13,7,26),mat); ring.rotation.x=-Math.PI/2; ring.position.y=0.15; g.add(ring);
+            const beam=new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.42,5.5,8),new THREE.MeshBasicMaterial({color,transparent:true,opacity:0.22,depthWrite:false}));
+            beam.position.y=3; g.add(beam);
+            const orb=new THREE.Mesh(new THREE.OctahedronGeometry(0.65,0),new THREE.MeshBasicMaterial({color,wireframe:true})); orb.position.y=5.9; g.add(orb);
+            scene.add(g); CAMPAIGN.marker=g; return g;
+        }
+        function createCampaignUpgrade(id,type,x,z) {
+            if (CAMPAIGN.collected.includes(id)) return;
+            const g=new THREE.Group();
+            const color=type==='health'?0xff385c:0x28baff;
+            const glow=new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:1.1,roughness:0.25,metalness:0.2});
+            const ring=new THREE.Mesh(new THREE.TorusGeometry(0.85,0.09,8,22),glow); ring.rotation.x=Math.PI/2; g.add(ring);
+            if(type==='health') {
+                const heart=new THREE.Mesh(new THREE.OctahedronGeometry(0.72,0),glow); heart.scale.set(0.85,1.1,0.55); heart.position.y=0.25; g.add(heart);
+                const plusMat=new THREE.MeshBasicMaterial({color:0xffffff});
+                const h=new THREE.Mesh(new THREE.BoxGeometry(0.72,0.14,0.12),plusMat); h.position.y=0.25; g.add(h);
+                const v=new THREE.Mesh(new THREE.BoxGeometry(0.14,0.72,0.12),plusMat); v.position.y=0.25; g.add(v);
+            } else {
+                const core=new THREE.Mesh(new THREE.ConeGeometry(0.55,1.45,5),glow); core.position.y=0.22; core.rotation.z=-0.35; g.add(core);
+                const trail=new THREE.Mesh(new THREE.TorusGeometry(0.48,0.07,6,18),new THREE.MeshBasicMaterial({color:0x9deaff})); trail.position.y=-0.35; g.add(trail);
+            }
+            g.position.set(x,1.2,z); scene.add(g);
+            CAMPAIGN.upgradeItems.push({id,type,x,z,mesh:g,active:true});
+        }
+        function setupCampaignUpgrades() {
+            CAMPAIGN.upgradeItems.forEach(i=>scene.remove(i.mesh)); CAMPAIGN.upgradeItems=[];
+            [
+                ['heart-downtown','health',-65,195],['heart-oldtown','health',-325,65],['heart-residential','health',325,325],
+                ['speed-industrial','speed',-325,-65],['speed-downtown','speed',65,-195],['speed-research','speed',455,-325]
+            ].forEach(([id,type,x,z])=>createCampaignUpgrade(id,type,x,z));
+        }
+        function enterCampaignStep() {
+            const step=CAMPAIGN_STEPS[CAMPAIGN.step];
+            if(!step) { finishCampaignStory(); return; }
+            if(CAMPAIGN.marker) { scene.remove(CAMPAIGN.marker); CAMPAIGN.marker=null; }
+            campaignPromptEl.style.display='none';
+            CAMPAIGN.killProgress=0;
+            if(step.kind==='boss') { startCampaignBoss(); return; }
+            if(step.x!==undefined) createCampaignMarker(step.x,step.z,step.kind==='interact'?'interact':'objective');
+            if(step.spawn==='industrial') spawnCampaignSecurity();
+            if(step.chapter>=2) CAMPAIGN.stalkerUnlocked=true;
+            if(step.cutscene) startCampaignCutscene(step.cutscene);
+            updateCampaignHUD(true);
+            saveCampaign();
+        }
+        function startCampaignSession() {
+            if(ACTIVE_MAP!=='city') { showStartError('The Greybridge city map did not load.'); return; }
+            loadCampaignSave();
+            if(CAMPAIGN.complete) resetCampaignSave();
+            campaignMode=true; figureMode=false; challengeMode=false; figureRoundOver=false; spectator=false;
+            playerHealth=campaignMaxHealth();
+            camera.position.set(CAMPAIGN.checkpoint.x,eyeHeight,CAMPAIGN.checkpoint.z); yaw=Math.PI; pitch=0;
+            camera.quaternion.setFromEuler(new THREE.Euler(pitch,yaw,0,'YXZ'));
+            CAMPAIGN.bossActive=false; CAMPAIGN.guardWaveSpawned=false; CAMPAIGN.killProgress=0;
+            CAMPAIGN.target=null; CAMPAIGN.cutscene=null; CAMPAIGN.needsOpening=CAMPAIGN.step===0;
+            CAMPAIGN.stalkerVisibleUntil=0; CAMPAIGN.nextStalkAt=0; CAMPAIGN.stalkerUnlocked=false;
+            if(FIG.group) scene.remove(FIG.group);
+            FIG.group=null; FIG.bodyMesh=null; FIG.legRig=null; FIG.limbMeshes=[]; FIG.flying=[];
+            buildFigureBody(); FIG.group.visible=false; FIG.ai=true;
+            setupCampaignUpgrades(); createCampaignActor();
+            enterCampaignStep();
+            campaignCaseLabel.style.display='block';
+            updateHUD();
+        }
+        function updateCampaignHUD(force=false) {
+            const now=performance.now();
+            if(!force && now-CAMPAIGN.lastHudAt<200) return;
+            CAMPAIGN.lastHudAt=now;
+            const step=CAMPAIGN_STEPS[CAMPAIGN.step];
+            if(!step) { objectiveEl.style.display='none'; return; }
+            objectiveEl.style.display='block';
+            let progress='';
+            if(step.kind==='clear') progress=`${CAMPAIGN.killProgress} / ${step.target} SECURITY UNITS`;
+            else if(step.kind==='boss') progress=`LIMBS ${FIG.limbs}/16 · BODY ${Math.max(0,Math.ceil(FIG.bodyHP))}`;
+            else if(step.x!==undefined) {
+                const dx=step.x-camera.position.x, dz=step.z-camera.position.z;
+                const distance=Math.round(Math.hypot(dx,dz));
+                const forward=new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion); forward.y=0; forward.normalize();
+                const dot=forward.x*dx+forward.z*dz;
+                const cross=forward.x*dz-forward.z*dx;
+                const bearing=distance<5 ? 'HERE' : (Math.abs(cross)<Math.abs(dot)*0.35 ? (dot>=0?'AHEAD':'BEHIND') : (cross>0?'RIGHT':'LEFT'));
+                progress=step.kind==='interact' ? `EVIDENCE · ${distance}M · ${bearing} · PRESS E` : `${step.district} · ${distance}M · ${bearing}`;
+            } else progress=step.district;
+            campaignCaseLabel.textContent=`GREYBRIDGE · ${step.district}`;
+            objectiveEl.innerHTML=`<div class="obj-title">CHAPTER ${step.chapter} · ${step.name}</div><div class="obj-text">${step.text}</div><div class="obj-prog">${progress}</div>`;
+            if(campaignMode && step.kind==='boss') {
+                healthEl.innerText=`HP: ${playerHealth} / ${campaignMaxHealth()}`;
+                ammoEl.innerText=`FIGURE LIMBS: ${FIG.limbs}/16`;
+            }
+        }
+        function advanceCampaignStep() {
+            const old=CAMPAIGN_STEPS[CAMPAIGN.step];
+            CAMPAIGN.step++;
+            CAMPAIGN.checkpoint={x:camera.position.x,z:camera.position.z};
+            saveCampaign();
+            if(CAMPAIGN.step>=CAMPAIGN_STEPS.length) { finishCampaignStory(); return; }
+            const next=CAMPAIGN_STEPS[CAMPAIGN.step];
+            if(next.chapter>old.chapter) showAnnouncement(`CHAPTER ${next.chapter}: ${next.name}`);
+            enterCampaignStep();
+        }
+        function campaignInteract() {
+            if(!campaignMode || CAMPAIGN.cutscene || isDead) return;
+            const step=CAMPAIGN_STEPS[CAMPAIGN.step];
+            if(!step || step.kind!=='interact' || step.x===undefined) return;
+            const d=Math.hypot(camera.position.x-step.x,camera.position.z-step.z);
+            if(d>6.5) { showAnnouncement('GET CLOSER TO THE EVIDENCE'); return; }
+            campaignPromptEl.style.display='none';
+            showAnnouncement(step.clue || 'Evidence collected.');
+            playSound('pickup');
+            advanceCampaignStep();
+        }
+        function spawnCampaignSecurity() {
+            if(CAMPAIGN.guardWaveSpawned) return;
+            CAMPAIGN.guardWaveSpawned=true;
+            const points=[[-325,-325],[-325,-195],[-195,-325]];
+            points.forEach((p,i)=>spawnBot(i!==1,p[0],p[1],0));
+            showAnnouncement('HOSTILE SECURITY UNITS — WEAPONS FREE');
+        }
+        function collectCampaignUpgrade(item) {
+            if(!item.active) return;
+            item.active=false; scene.remove(item.mesh);
+            CAMPAIGN.collected.push(item.id);
+            if(item.type==='health') {
+                CAMPAIGN.healthUpgrades++;
+                playerHealth=campaignMaxHealth();
+                showAnnouncement(`HEALTH CAPACITY +25  ·  MAX ${campaignMaxHealth()} HP`);
+            } else {
+                CAMPAIGN.speedUpgrades++;
+                showAnnouncement(`SPEED BOOSTER ${CAMPAIGN.speedUpgrades}/3  ·  RUN + WALL-RUN FASTER`);
+            }
+            playSound('pickup'); saveCampaign(); updateHUD(); updateCampaignHUD(true);
+        }
+        function updateCampaign() {
+            if(!campaignMode || CAMPAIGN.cutscene || isDead) return;
+            const step=CAMPAIGN_STEPS[CAMPAIGN.step];
+            if(!step) return;
+            if(CAMPAIGN.marker) { CAMPAIGN.marker.rotation.y+=0.012*frameScale; }
+            CAMPAIGN.upgradeItems.forEach(item=>{
+                if(!item.active) return;
+                item.mesh.rotation.y+=0.018*frameScale;
+                item.mesh.position.y=1.2+Math.sin(performance.now()*0.003+item.x)*0.18;
+                if(Math.hypot(camera.position.x-item.x,camera.position.z-item.z)<2.7) collectCampaignUpgrade(item);
+            });
+            if(step.kind==='reach') {
+                const d=Math.hypot(camera.position.x-step.x,camera.position.z-step.z);
+                if(d<step.radius) advanceCampaignStep();
+            } else if(step.kind==='interact') {
+                const d=Math.hypot(camera.position.x-step.x,camera.position.z-step.z);
+                if(d<6.5) {
+                    campaignPromptEl.textContent=step.prompt || 'PRESS E  ·  INVESTIGATE';
+                    campaignPromptEl.style.display='block';
+                } else campaignPromptEl.style.display='none';
+            } else if(step.kind==='clear') {
+                campaignPromptEl.style.display='none';
+                const live=bots.filter(b=>b.health>0).length;
+                if(CAMPAIGN.killProgress>=step.target) advanceCampaignStep();
+                else if(live===0 && CAMPAIGN.guardWaveSpawned && CAMPAIGN.killProgress<step.target) {
+                    // Should an enemy fail to spawn, make the remaining wave available again.
+                    spawnCampaignSecurity();
+                }
+            }
+            if(CAMPAIGN.stalkerUnlocked && !CAMPAIGN.bossActive) updateCampaignStalker();
+            updateCampaignHUD();
+        }
+        function updateCampaignStalker() {
+            if(!FIG.group || CAMPAIGN.step<3) return;
+            const now=performance.now();
+            const player=new THREE.Vector3(camera.position.x,0,camera.position.z);
+            const gp=FIG.group.position;
+            if(!FIG.group.visible && now>CAMPAIGN.nextStalkAt) {
+                // Appear down a street in front of the detective, never directly on top of him.
+                const fwd=new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion); fwd.y=0; fwd.normalize();
+                const roads=[-455,-325,-195,-65,65,195,325,455];
+                let best=null, bestScore=Infinity;
+                for(const x of roads) for(const z of roads) {
+                    const dx=x-camera.position.x, dz=z-camera.position.z;
+                    const distance=Math.hypot(dx,dz);
+                    const forwardDot=dx*fwd.x+dz*fwd.z;
+                    if(distance<34 || distance>105 || forwardDot<20) continue;
+                    const score=Math.abs(distance-70)-Math.min(18,forwardDot*0.08);
+                    if(score<bestScore) { bestScore=score; best={x,z}; }
+                }
+                if(!best) { CAMPAIGN.nextStalkAt=now+5000; return; }
+                FIG.group.position.set(best.x,0,best.z); FIG.group.visible=true;
+                CAMPAIGN.stalkerVisibleUntil=now+5200; CAMPAIGN.nextStalkAt=now+18000+Math.random()*12000;
+                showAnnouncement('MOVEMENT DETECTED');
+            }
+            if(!FIG.group.visible) return;
+            const dx=camera.position.x-gp.x, dz=camera.position.z-gp.z, d=Math.hypot(dx,dz)||1;
+            FIG.group.rotation.y=Math.atan2(dx,dz);
+            if(now>CAMPAIGN.stalkerVisibleUntil || d<13) {
+                FIG.group.visible=false;
+                if(d<13 && CAMPAIGN.step>=5) { damagePlayer(12,null,'Figure'); playSound('hit'); }
+                return;
+            }
+            // It paces across the far end of the street, shadowing rather than behaving like a normal bot.
+            const pace=0.025*frameScale;
+            const tx=gp.x+(-dz/d)*pace, tz=gp.z+(dx/d)*pace;
+            if(botCanStand(tx,tz)) { gp.x=tx; gp.z=tz; }
+            animateFigureLegs(now,1);
+        }
+        function startCampaignBoss() {
+            CAMPAIGN.bossActive=true; CAMPAIGN.stalkerUnlocked=false;
+            saveCampaign();
+            CAMPAIGN.bossNextAttack=performance.now()+1200; CAMPAIGN.bossNextThrow=performance.now()+6500;
+            FIG.group.visible=true; FIG.group.position.set(260,0,-252); FIG.group.rotation.y=Math.PI;
+            FIG.limbs=16; FIG.bodyHP=FIG.maxBody=2400; FIG.ai=true; FIG.stunUntil=0; FIG.leap=null;
+            FIG.limbMeshes.forEach(l=>{ l.alive=true; l.hp=FIG_LIMB_HP; if(l.hip && l.hip.parent!==FIG.legRig) FIG.legRig.add(l.hip); });
+            if(FIG.legRig) FIG.legRig.visible=true;
+            createCampaignMarker(260,-252,'boss');
+            showAnnouncement('F-01 HOSTILE — DESTROY ALL 16 LIMBS TO EXPOSE THE CORE');
+            updateCampaignHUD(true);
+        }
+        function updateCampaignBoss() {
+            if(!CAMPAIGN.bossActive || !FIG.group || !FIG.group.visible) return;
+            const now=performance.now(), gp=FIG.group.position;
+            const dx=camera.position.x-gp.x, dz=camera.position.z-gp.z, d=Math.hypot(dx,dz)||1;
+            FIG.group.rotation.y=Math.atan2(dx,dz);
+            const movement= d>4.4;
+            if(movement) {
+                const speed=(FIG.limbs>0?0.075:0.026)*frameScale;
+                const nx=gp.x+dx/d*speed, nz=gp.z+dz/d*speed;
+                if(botCanStand(nx,nz) && Math.abs(nx)<ARENA-5 && Math.abs(nz)<ARENA-5) { gp.x=nx; gp.z=nz; }
+            }
+            if(d<5.2 && now>CAMPAIGN.bossNextAttack) {
+                CAMPAIGN.bossNextAttack=now+1450; damagePlayer(FIG.limbs>0?18:11,null,'Figure'); playSound('hit');
+            }
+            if(d<12 && now>CAMPAIGN.bossNextThrow) {
+                CAMPAIGN.bossNextThrow=now+8200; damagePlayer(24,null,'Figure THROW');
+                const kx=dx/d, kz=dz/d; pvx+=kx*0.22; pvz+=kz*0.22; playSound('boom');
+            }
+            gp.y=getFloorHeight(gp.x,gp.z,gp.y+1);
+            animateFigureLegs(now,movement?1:0);
+            updateCampaignHUD();
+        }
+        function campaignLines(id) {
+            const lines={
+                opening:['GREYBRIDGE POLICE DISPATCH: Detective Tony Yorkshire Pudding, report to the Research District.','DISPATCH: A containment facility has gone dark. Three scientists are missing.','TONY: Right. A quiet shift, then.'],
+                arrival:['TONY: The whole block has been cleared. That is never a good sign.','TONY: Security door is bent outward... no. Inward. Whatever was inside wanted out.'],
+                firstSighting:['UNKNOWN RECORDING: Subject F-01 is learning patterns. It recognises faces.','TONY: Someone has been watching the street.','TONY: ...and I think it knows I am here.'],
+                rooftop:['TONY: Eight sets of tracks. All heading the same way.','TONY: That is not how any animal walks.'],
+                chase:['DISPATCH: Detective, get away from the yard!','TONY: I can see it. It is moving across the rooftops!','DISPATCH: RUN, YORKSHIRE PUDDING!'],
+                return:['TONY: This started here. The answers are still inside.','TONY: I am going back in.'],
+                truth:['ARCHIVE: F-01 target-recognition protocol active.','ARCHIVE: Priority observation subject — TONY YORKSHIRE PUDDING.','TONY: They did not just make a monster. They pointed it at me.'],
+                hunt:['DISPATCH: We have lost the east bridge. The Figure is moving toward you.','TONY: It is not searching anymore. It is closing in.'],
+                finalApproach:['TONY: End of the line.','TONY: Come on, then.'],
+                ending:['TONY: F-01 is down.','DISPATCH: Greybridge is secure. Stand by for extraction.','TONY: I am going to need a very long holiday.']
+            };
+            return lines[id] || ['GREYBRIDGE POLICE · CASE F-01'];
+        }
+        function startCampaignCutscene(id) {
+            if(!campaignMode || CAMPAIGN.cutscene) return;
+            const actor=createCampaignActor();
+            const forward=new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion); forward.y=0; forward.normalize();
+            const actorStart=new THREE.Vector3(camera.position.x+forward.x*5,0,camera.position.z+forward.z*5);
+            actor.position.copy(actorStart); actor.visible=true;
+            let focus=new THREE.Vector3(actorStart.x,1.4,actorStart.z-8);
+            let camFrom=new THREE.Vector3(actorStart.x+9,5.2,actorStart.z+11);
+            let camTo=new THREE.Vector3(actorStart.x+5,4.1,actorStart.z+7);
+            if(id==='firstSighting'||id==='rooftop'||id==='chase'||id==='hunt'||id==='finalApproach') {
+                const fx=(id==='rooftop'?-325:(id==='chase'?-325:(id==='hunt'?195:260)));
+                const fz=(id==='rooftop'?325:(id==='chase'?-325:(id==='hunt'?65:(id==='firstSighting'?-225:-252))));
+                FIG.group.position.set(fx,0,fz); FIG.group.visible=true;
+                focus.set(fx,4.5,fz);
+                camFrom.set(actorStart.x+10,6,actorStart.z+10);
+                camTo.set((actorStart.x+fx)/2+14,9,(actorStart.z+fz)/2+14);
+            } else if(id==='truth') {
+                focus.set(260,7,-260); camTo.set(285,8,-225);
+            } else if(id==='ending') {
+                focus.set(260,4,-252); camFrom.set(285,13,-230); camTo.set(295,18,-205);
+            }
+            const lines=campaignLines(id), duration=Math.max(7000,lines.length*2600);
+            CAMPAIGN.cutscene={id,lines,duration,start:performance.now(),camFrom:camFrom.clone(),camTo:camTo.clone(),focus:focus.clone(),actorStart:actorStart.clone(),actorEnd:actorStart.clone().add(new THREE.Vector3(forward.x*3,0,forward.z*3)),savedPosition:camera.position.clone(),savedQuaternion:camera.quaternion.clone()};
+            campaignCutsceneCaption.textContent=lines[0];
+            campaignCutscenePanel.style.display='block'; campaignPromptEl.style.display='none';
+            if(currentWeaponMesh) currentWeaponMesh.visible=false;
+            meleeMesh.visible=false;
+        }
+        function finishCampaignCutscene() {
+            const cs=CAMPAIGN.cutscene; if(!cs) return;
+            CAMPAIGN.cutscene=null;
+            campaignCutscenePanel.style.display='none';
+            if(CAMPAIGN.actor) CAMPAIGN.actor.visible=false;
+            if(!CAMPAIGN.bossActive && FIG.group && ['firstSighting','rooftop','chase','hunt','finalApproach'].includes(cs.id)) {
+                FIG.group.visible=false;
+                CAMPAIGN.nextStalkAt=performance.now()+9000;
+            }
+            camera.position.copy(cs.savedPosition); camera.quaternion.copy(cs.savedQuaternion);
+            if(currentWeaponMesh) currentWeaponMesh.visible=true;
+            if(CAMPAIGN.complete) campaignCompletePanel.style.display='flex';
+            updateCampaignHUD(true);
+        }
+        function updateCampaignCutscene() {
+            const cs=CAMPAIGN.cutscene; if(!cs) return;
+            const elapsed=performance.now()-cs.start;
+            const t=Math.min(1,elapsed/cs.duration), smooth=t*t*(3-2*t);
+            camera.position.lerpVectors(cs.camFrom,cs.camTo,smooth);
+            camera.lookAt(cs.focus);
+            if(CAMPAIGN.actor) {
+                CAMPAIGN.actor.position.lerpVectors(cs.actorStart,cs.actorEnd,smooth);
+                const swing=Math.sin(elapsed*0.008)*0.48*(t<0.8?1:0);
+                (CAMPAIGN.actor.userData.legs||[]).forEach((leg,i)=>leg.rotation.x=(i===0?1:-1)*swing);
+                (CAMPAIGN.actor.userData.arms||[]).forEach((arm,i)=>arm.rotation.x=(i===0?-1:1)*swing*0.7);
+            }
+            const lineIndex=Math.min(cs.lines.length-1,Math.floor(elapsed/(cs.duration/cs.lines.length)));
+            if(campaignCutsceneCaption.textContent!==cs.lines[lineIndex]) campaignCutsceneCaption.textContent=cs.lines[lineIndex];
+            if(t>=1) finishCampaignCutscene();
+        }
+        function completeCampaignBoss() {
+            if(!CAMPAIGN.bossActive) return;
+            CAMPAIGN.bossActive=false; CAMPAIGN.complete=true; CAMPAIGN.step=CAMPAIGN_STEPS.length;
+            if(FIG.group) FIG.group.visible=false;
+            if(CAMPAIGN.marker) { scene.remove(CAMPAIGN.marker); CAMPAIGN.marker=null; }
+            saveCampaign(); showAnnouncement('F-01 DESTROYED');
+            startCampaignCutscene('ending');
+        }
+        function finishCampaignStory() {
+            CAMPAIGN.complete=true; saveCampaign(); campaignCompletePanel.style.display='flex';
+            if(CAMPAIGN.marker) { scene.remove(CAMPAIGN.marker); CAMPAIGN.marker=null; }
+            objectiveEl.style.display='none';
+        }
+        // Override the generic kill callback only for the campaign's final encounter.
+        const _campaignKillAIFigure = killAIFigure;
+        // In-engine campaign update is called from the main render loop.
+        function updateCampaignFrame() {
+            updateFlyingFigureLimbs();
+            if(CAMPAIGN.bossActive) updateCampaignBoss();
+        }
+        // Story combat events are routed through the existing objective event system.
+        const _campaignObjectiveEvent = onObjectiveEvent;
+        onObjectiveEvent = function(type,data) {
+            if(campaignMode && type==='botKill') {
+                const step=CAMPAIGN_STEPS[CAMPAIGN.step];
+                if(step && step.kind==='clear') { CAMPAIGN.killProgress++; updateCampaignHUD(true); }
+            }
+            _campaignObjectiveEvent(type,data);
+        };
+
+        // The campaign starts from the title menu and uses the city map hand-off.
+        try {
+            if(sessionStorage.getItem('liteshotCampaignIntro')==='1') {
+                sessionStorage.removeItem('liteshotCampaignIntro');
+                setTimeout(showCampaignIntro,0);
+            }
+        } catch(err) {}
+        // ================== END GREYBRIDGE CAMPAIGN ==================
 
         animate();
 
