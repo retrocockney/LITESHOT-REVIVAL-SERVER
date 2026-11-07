@@ -101,6 +101,24 @@ io.on('connection', (socket) => {
         socket.to(p.room).volatile.emit('figureState', state);
     });
 
+    // A survivor's shot hit the Figure: tell the Figure's controller to take the damage
+    socket.on('figureHit', (h = {}) => {
+        const me = players.get(socket.id);
+        if (!me || me.role !== 'survivor' || me.dead) return;
+        const fig = figureIn(me.room);
+        if (!fig) return;
+        io.to(fig.id).emit('figureHurt', {
+            amount: Math.max(0, Math.min(200, num(h.amount))), from: me.id, weapon: String(h.weapon || 'Unknown').slice(0, 24)
+        });
+    });
+
+    // The Figure's controller ends the round (its body was destroyed)
+    socket.on('roundOver', (d = {}) => {
+        const p = players.get(socket.id);
+        if (!p || p.role !== 'figure') return;
+        io.to(p.room).emit('roundOver', { title: String(d.title || 'ROUND OVER').slice(0, 40), sub: String(d.sub || '').slice(0, 120) });
+    });
+
     // A shot landed on another player: tell the victim's game to take the damage
     socket.on('hit', (h = {}) => {
         const me = players.get(socket.id);
@@ -126,6 +144,11 @@ io.on('connection', (socket) => {
             victim: victim.name,
             weapon: String(d.weapon || 'Unknown').slice(0, 24)
         });
+        // Figure rounds: the Figure wins once no survivor is left alive
+        if (victim.room.startsWith('fig-') && figureIn(victim.room)) {
+            const anyAlive = [...players.values()].some((p) => p.room === victim.room && p.role === 'survivor' && !p.dead);
+            if (!anyAlive) io.to(victim.room).emit('roundOver', { title: 'FIGURE WINS', sub: 'All survivors have been eliminated.' });
+        }
     });
 
     socket.on('respawn', (d = {}) => {
@@ -150,7 +173,7 @@ io.on('connection', (socket) => {
 
 // Free-for-all: everyone in a map room gets the positions of the others about 20 times a second
 setInterval(() => {
-    for (const room of MAPS) {
+    for (const room of [...MAPS, ...MAPS.map((m) => 'fig-' + m)]) {
         const list = [...players.values()].filter((p) => p.room === room).map(publicInfo);
         if (list.length) io.to(room).volatile.emit('states', list);
     }
